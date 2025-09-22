@@ -1,10 +1,12 @@
-import { Link, NavLink, Outlet } from "react-router-dom"
+import { Link, Outlet, useLocation } from "react-router-dom"
 import { routes } from "../utils/routes"
 
 function Layout() {
+    const { pathname } = useLocation()
+
 
     return (
-        <>
+        <div>
             <header>header</header>
             <nav>
                 <Link to={routes.home}>home</Link>
@@ -15,7 +17,7 @@ function Layout() {
             </nav>
             <Outlet />
             <footer>footer</footer>
-        </>
+        </div>
     )
 }
 
