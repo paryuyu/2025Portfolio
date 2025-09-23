@@ -1,12 +1,111 @@
 @import "tailwindcss";
 
-/* TODO: 테마색 및 폰트 정해서 설정하기. */
-/* Deep Sea */
+@font-face {
+    font-family: 유설체;
+    src: url("/fonts/유설체.ttf");
+}
+
+@font-face {
+    font-family: NotoSans;
+    src: url("/fonts/NotoSansKR-Var.ttf");
+}
+
 @theme {
     --main-color: #0d1b2a;
     --sub-color: #1e263b;
     --sub2-color: #415a77;
     --sub3-color: #778da9;
     --background-color: #e0e1dd;
+    --font-sans: NotoSans;
+    --point-font: 유설체;
+    --header-height: 80px;
+    --pc-gap: 24px;
+    --mo-gap: 16px;
 }
 
+
+@utility text-gradient {
+    background: linear-gradient(180deg, var(--main-color) 0%, var(--sub2-color) 50%, var(--sub3-color) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 0 #0d1b2a;
+}
+
+
+@layer components {
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    ::selection {
+        @apply bg-[var(--sub2-color)]/60 text-[var(--background-color)];
+    }
+
+    body {
+        @apply bg-[var(--background-color)] text-[var(--main-color)] font-[var(--font-sans)];
+    }
+
+    header {
+        @apply h-[var(--header-height)] border-[var(--sub-color)] flex bg-[var(--sub-color)] text-[var(--background-color)];
+    }
+
+    nav {
+        @apply flex justify-start items-center gap-2 mx-[var(--pc-gap)];
+    }
+
+    nav>a {
+        @apply border-2 px-4 py-1 rounded-full border-[var(--background-color)] active:bg-[var(--background-color)]/15 h-fit;
+    }
+
+    main {
+        @apply m-auto text-center flex justify-center flex-col items-center;
+        height: calc(100dvh - var(--header-height));
+    }
+
+    :where(main) h1 {
+        @apply font-extrabold text-[200px];
+    }
+
+    :where(main) article {
+        @apply text-sm w-fit mt-12 flex flex-col border p-4 rounded-lg font-medium relative;
+    }
+
+    .contact_wrapper {
+        @apply flex-1 flex justify-end gap-4 mx-[var(--pc-gap)];
+    }
+
+    .subtext {
+        @apply text-6xl font-mono mb-[40px];
+    }
+
+    :where(.contact_wrapper) svg {
+        @apply w-6 cursor-pointer;
+    }
+
+    .specific_text {
+        font-family: 유설체;
+        color: #00000020;
+        @apply absolute mt-8;
+    }
+
+    .specific_text::selection {
+        @apply bg-transparent;
+    }
+
+    .project_menu {
+        @apply pb-4 pl-4 cursor-pointer;
+    }
+
+    .project_menu.active {
+        @apply text-[var(--main-color)] font-bold;
+    }
+
+    .project_menu_wrap {
+        @apply flex m-6 gap-2 border-b border-b-gray-300;
+    }
+
+    .project_wrapper {
+        @apply mx-[var(--pc-gap)];
+    }
+}
