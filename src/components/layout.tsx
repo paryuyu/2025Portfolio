@@ -1,14 +1,14 @@
-import { Link, Outlet, useLocation } from "react-router-dom"
+import { Link, Outlet } from "react-router-dom"
 import { routes } from "../utils/routes"
 
 function Layout() {
-    const { pathname } = useLocation()
+    // const { pathname } = useLocation()
 
 
     return (
         <div>
-            <header>header</header>
-            <nav>
+            {/* <header>header</header> */}
+            <nav className="flex justify-evenly w-full h-[48px] items-center">
                 <Link to={routes.home}>home</Link>
                 <Link to={routes.projects}>projects</Link>
                 <Link to={routes.about}>about</Link>
@@ -16,7 +16,7 @@ function Layout() {
                 <Link to={routes.skills}>skills</Link>
             </nav>
             <Outlet />
-            <footer>footer</footer>
+            {/* <footer>footer</footer> */}
         </div>
     )
 }

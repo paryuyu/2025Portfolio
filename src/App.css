@@ -1,3 +1,12 @@
 @import "tailwindcss";
 
 /* TODO: 테마색 및 폰트 정해서 설정하기. */
+/* Deep Sea */
+@theme {
+    --main-color: #0d1b2a;
+    --sub-color: #1e263b;
+    --sub2-color: #415a77;
+    --sub3-color: #778da9;
+    --background-color: #e0e1dd;
+}
+
