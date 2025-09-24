@@ -21,6 +21,8 @@
     --header-height: 80px;
     --pc-gap: 24px;
     --mo-gap: 16px;
+    --pc-font-size: 24px;
+    --pc-hero-text-size: 48px;
 }
 
 
@@ -47,7 +49,7 @@
     }
 
     header {
-        @apply h-[var(--header-height)] border-[var(--sub-color)] flex bg-[var(--sub-color)] text-[var(--background-color)];
+        @apply h-[var(--header-height)] border-[var(--sub-color)] flex border-b;
     }
 
     nav {
@@ -55,12 +57,20 @@
     }
 
     nav>a {
-        @apply border-2 px-4 py-1 rounded-full border-[var(--background-color)] active:bg-[var(--background-color)]/15 h-fit;
+        @apply px-4 py-1 active:bg-[var(--background-color)]/15 h-fit p-2;
     }
 
     main {
-        @apply m-auto text-center flex justify-center flex-col items-center;
+        @apply m-[24px] p-[24px] text-center flex justify-center flex-col items-center border;
         height: calc(100dvh - var(--header-height));
+    }
+
+    .skill_section {
+        @apply flex;
+    }
+
+    .skill_section>svg {
+        @apply w-4 h-4;
     }
 
     :where(main) h1 {
@@ -83,18 +93,9 @@
         @apply w-6 cursor-pointer;
     }
 
-    .specific_text {
-        font-family: 유설체;
-        color: #00000020;
-        @apply absolute mt-8;
-    }
-
-    .specific_text::selection {
-        @apply bg-transparent;
-    }
 
     .project_menu {
-        @apply pb-4 pl-4 cursor-pointer;
+        @apply pb-4 pl-4 cursor-pointer whitespace-nowrap;
     }
 
     .project_menu.active {
@@ -102,10 +103,55 @@
     }
 
     .project_menu_wrap {
-        @apply flex m-6 gap-2 border-b border-b-gray-300;
+        @apply flex m-6 gap-2 border-b border-b-gray-300 overflow-x-scroll;
     }
 
     .project_wrapper {
-        @apply mx-[var(--pc-gap)];
+        @apply p-[24px] grid grid-cols-2 gap-6 m-6 border;
+    }
+
+    img {
+        @apply w-full z-[999] cursor-pointer;
+    }
+
+    .altconsole_video {
+        @apply w-full h-full;
+    }
+
+    @media (max-width: 699px) {
+        main {
+            @apply justify-start items-end h-fit m-[16px] p-[16px];
+        }
+
+        .subtext {
+            @apply text-xl text-end;
+        }
+
+        .paragraph {
+            @apply text-xs;
+        }
+
+        article {
+            @apply w-full p-[8px] mt-0;
+        }
+    }
+
+    /* 태블릿: 700px~1199px */
+    @media (min-width: 700px) and (max-width: 1199px) {
+        main {
+            @apply items-end justify-end;
+        }
+
+        .subtext {
+            @apply text-2xl text-end;
+        }
+
+        .specific_text {
+            @apply text-sm
+        }
+
+        .hero {
+            @apply text-sm;
+        }
     }
 }

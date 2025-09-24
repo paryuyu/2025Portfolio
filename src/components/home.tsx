@@ -5,7 +5,7 @@ import { SplitText } from 'gsap/all';
 function Home() {
   // gsap text animation
   useGSAP(() => {
-    const heroSplit = new SplitText('.hero', { type: 'chars, words' });
+    const heroSplit = new SplitText('.subtext', { type: 'chars, words' });
     const paragraphSplit = new SplitText('.paragraph', { type: 'lines' });
 
     heroSplit.chars.forEach((char) => char.classList.add('text-gradient'));
@@ -29,14 +29,12 @@ function Home() {
   return (
     <main>
       <h1>
-        <div className="subtext paragraph">
-          Hello! <br />
+        <div className="subtext">
+          hi, <br />
           I'm a Front-end Engineer.
         </div>
-        <div className="specific_text">PORTFOLIO</div>
-        <div className="hero">PORTFOLIO</div>
       </h1>
-      <article className=" ">
+      <article className="">
         <span className="paragraph">
           저는 꾸준히 학습하며 성장하는 프론트엔드 개발자로, React 및 Next.js
           기반 SPA 구축을 주로 담당하며 사용자 경험 향상과 데이터/UI 최적화를
