@@ -66,13 +66,30 @@
     }
 
     .skill_section {
-        @apply flex;
+        @apply flex flex-col border-b py-4 px-[40px];
     }
 
-    .skill_section>svg {
+    .skill_head_text{
+        @apply text-6xl; 
+    }
+
+    .skill_list{
+        @apply flex w-full mt-6 flex-wrap gap-4;
+    }
+
+    .skill_item{
+        @apply flex items-center justify-center gap-2 p-2 rounded-lg border-gray-100 bg-[#00000010] font-thin cursor-pointer;
+    }
+
+    .skill_item.active{
+        @apply bg-[var(--sub2-color)]/40 text-white;
+    }
+
+
+    .skill_item>svg{
         @apply w-4 h-4;
     }
-
+ 
     :where(main) h1 {
         @apply font-extrabold text-[200px];
     }
