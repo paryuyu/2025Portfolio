@@ -70,7 +70,7 @@
     }
 
     .skill_head_text{
-        @apply text-6xl; 
+        @apply text-6xl;
     }
 
     .skill_list{
@@ -89,7 +89,13 @@
     .skill_item>svg{
         @apply w-4 h-4;
     }
- 
+
+
+    .skill_item>img{
+        @apply w-4 h-4;
+    }
+
+
     :where(main) h1 {
         @apply font-extrabold text-[200px];
     }
@@ -124,16 +130,13 @@
     }
 
     .project_wrapper {
-        @apply p-[24px] grid grid-cols-2 gap-6 m-6 border;
+        @apply p-[24px] gap-6 m-6 border;
     }
 
     img {
         @apply w-full z-[999] cursor-pointer;
     }
 
-    .altconsole_video {
-        @apply w-full h-full;
-    }
 
     @media (max-width: 699px) {
         main {

@@ -1,5 +1,5 @@
+import { NavLink } from 'react-router-dom';
 import { routes } from '../utils/routes';
-import {  NavLink } from 'react-router-dom';
 
 const Nav = () => {
   return (
@@ -9,6 +9,7 @@ const Nav = () => {
       </NavLink>
       <NavLink to={routes.projects}>[ projects ]</NavLink>
       <NavLink to={routes.about}>[ about ]</NavLink>
+      <NavLink to={routes.connect}>[ connect ]</NavLink>
     </nav>
   );
 };

@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
-import AltaHomepage from './projects/altaHomepage';
 import AltConsole from './projects/altConsole';
-import AltGate from './projects/altGate';
-import Portfolio from './projects/portfolio';
 import Skills from './skills';
 
 function Projects() {
-  type menu = 'altGate' | 'altConsole' | 'altaHomepage' | 'portfolio'
-  const [menu, setMenu] = useState<menu>(
-    'altConsole',
-  );
+  type menu = 'altGate' | 'altConsole' | 'altaHomepage' | 'portfolio';
+  const [menu, setMenu] = useState<menu>('altConsole');
 
   const handleMenu = (evt: React.MouseEvent<HTMLDivElement>) => {
     const value = evt.currentTarget.dataset.value as menu;
@@ -61,7 +56,6 @@ function Projects() {
         {/* {menu === 'altaHomepage' && <AltaHomepage />}
         {menu === 'altGate' && <AltGate />}
         {menu === 'portfolio' && <Portfolio />} */}
-
       </section>
     </>
   );
