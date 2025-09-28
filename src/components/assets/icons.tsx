@@ -1,3 +1,5 @@
+import { usedSkills } from "../../utils/projects";
+
 export const icons = [
   {
     icon: (
@@ -8,7 +10,7 @@ export const icons = [
         />
       </svg>
     ),
-    iconName: 'git',
+    iconName: usedSkills.git,
   },
   {
     icon: (
@@ -19,7 +21,7 @@ export const icons = [
         </g>
       </svg>
     ),
-    iconName: 'react',
+    iconName: usedSkills.react,
   },
   {
     icon: (
@@ -27,7 +29,7 @@ export const icons = [
         <path d="M64 0C28.7 0 0 28.7 0 64s28.7 64 64 64c11.2 0 21.7-2.9 30.8-7.9L48.4 55.3v36.6h-6.8V41.8h6.8l50.5 75.8C116.4 106.2 128 86.5 128 64c0-35.3-28.7-64-64-64zm22.1 84.6l-7.5-11.3V41.8h7.5v42.8z" />
       </svg>
     ),
-    iconName: 'nextJs',
+    iconName: usedSkills.nextjs,
   },
   {
     icon: (
@@ -69,7 +71,7 @@ export const icons = [
         />
       </svg>
     ),
-    iconName: 'vite',
+    iconName: usedSkills.vite,
   },
   {
     icon: (
@@ -82,7 +84,7 @@ export const icons = [
         />
       </svg>
     ),
-    iconName: 'typeScript',
+    iconName: usedSkills.typeScript,
   },
   {
     icon: (
@@ -94,7 +96,7 @@ export const icons = [
         />
       </svg>
     ),
-    iconName: 'javaScript',
+    iconName: usedSkills.javaScript,
   },
   {
     icon: (
@@ -107,7 +109,7 @@ export const icons = [
         />
       </svg>
     ),
-    iconName: 'scss',
+    iconName: usedSkills.scss,
   },
   {
     icon: (
@@ -138,7 +140,7 @@ export const icons = [
         />
       </svg>
     ),
-    iconName: 'css3',
+    iconName: usedSkills.css3,
   },
   {
     icon: (
@@ -149,7 +151,7 @@ export const icons = [
         />
       </svg>
     ),
-    iconName: 'tailwindcss',
+    iconName: usedSkills.tailwindcss,
   },
   {
     icon: (
@@ -184,11 +186,11 @@ export const icons = [
         ></path>
       </svg>
     ),
-    iconName: 'react-query',
+    iconName: usedSkills.reactQuery,
   },
   {
     icon: <img src="/images/logos/zustand.svg" alt="zustand-logo" />,
-    iconName: 'zustand',
+    iconName: usedSkills.zustand,
   },
   {
     icon: (
@@ -203,6 +205,6 @@ export const icons = [
         />
       </svg>
     ),
-    iconName: 'axios',
+    iconName: usedSkills.axios,
   },
 ];

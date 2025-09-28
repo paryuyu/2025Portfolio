@@ -1,26 +1,20 @@
 @import "tailwindcss";
 
 @font-face {
-    font-family: 유설체;
-    src: url("/fonts/유설체.ttf");
-}
-
-@font-face {
     font-family: NotoSans;
     src: url("/fonts/NotoSansKR-Var.ttf");
 }
 
 @theme {
-    --main-color: #0d1b2a;
-    --sub-color: #1e263b;
-    --sub2-color: #415a77;
-    --sub3-color: #778da9;
-    --background-color: #e0e1dd;
+    --main-color: #f95738;
+    --sub-color: #ee964b;
+    --sub2-color: #f4d35e;
+    --sub3-color: #0d3b66;
+    --background-color: #faf0ca;
     --font-sans: NotoSans;
-    --point-font: 유설체;
     --header-height: 80px;
     --pc-gap: 24px;
-    --mo-gap: 16px;
+    --mo-tb-gap: 16px;
     --pc-font-size: 24px;
     --pc-hero-text-size: 48px;
 }
@@ -41,11 +35,11 @@
     }
 
     ::selection {
-        @apply bg-[var(--sub2-color)]/60 text-[var(--background-color)];
+        @apply bg-[var(--sub2-color)]/60 text-[var(--sub3-color)];
     }
 
     body {
-        @apply bg-[var(--background-color)] text-[var(--main-color)] font-[var(--font-sans)];
+        @apply bg-[var(--background-color)] text-[var(--main-color)] font-[var(--font-sans)] h-dvh w-dvw;
     }
 
     header {
@@ -60,56 +54,41 @@
         @apply px-4 py-1 active:bg-[var(--background-color)]/15 h-fit p-2;
     }
 
-    main {
-        @apply m-[24px] p-[24px] text-center flex justify-center flex-col items-center border;
-        height: calc(100dvh - var(--header-height));
+    .home_main{
+        @apply grid grid-cols-2 overflow-hidden;
     }
 
+    .home_main_section{
+        @apply bg-[var(--sub2-color)]/70 items-start justify-center flex flex-col gap-[24px] px-[24px];
+        height: calc( 100dvh - var(--header-height));
+    }
+    
     .skill_section {
         @apply flex flex-col border-b py-4 px-[40px];
     }
 
-    .skill_head_text{
-        @apply text-6xl;
+    .skill_list {
+        @apply flex w-full mt-[var(--pc-gap)] flex-wrap gap-4;
     }
 
-    .skill_list{
-        @apply flex w-full mt-6 flex-wrap gap-4;
-    }
-
-    .skill_item{
+    .skill_item {
         @apply flex items-center justify-center gap-2 p-2 rounded-lg border-gray-100 bg-[#00000010] font-thin cursor-pointer;
     }
 
-    .skill_item.active{
+    .skill_item.active {
         @apply bg-[var(--sub2-color)]/40 text-white;
     }
 
-
-    .skill_item>svg{
+    .skill_item>svg {
         @apply w-4 h-4;
     }
 
-
-    .skill_item>img{
+    .skill_item>img {
         @apply w-4 h-4;
-    }
-
-
-    :where(main) h1 {
-        @apply font-extrabold text-[200px];
-    }
-
-    :where(main) article {
-        @apply text-sm w-fit mt-12 flex flex-col border p-4 rounded-lg font-medium relative;
     }
 
     .contact_wrapper {
         @apply flex-1 flex justify-end gap-4 mx-[var(--pc-gap)];
-    }
-
-    .subtext {
-        @apply text-6xl font-mono mb-[40px];
     }
 
     :where(.contact_wrapper) svg {
@@ -126,44 +105,83 @@
     }
 
     .project_menu_wrap {
-        @apply flex m-6 gap-2 border-b border-b-gray-300 overflow-x-scroll;
+        @apply flex m-[var(--pc-gap)] gap-2 border-b border-b-gray-300 overflow-x-scroll;
     }
 
     .project_wrapper {
-        @apply p-[24px] gap-6 m-6 border;
+        @apply p-[var(--pc-gap)] gap-6 border;
+    }
+
+    .project_item {
+        @apply flex justify-center items-start w-full
+    }
+
+    .project_video {
+        @apply flex-1 max-w-[800px];
     }
 
     img {
         @apply w-full z-[999] cursor-pointer;
     }
 
+    .menu_icon{
+        @apply hidden;
+    }
 
+    :where(.home_main) h1 {
+        @apply text-9xl px-[24px] my-auto text-[var(--main-color)];
+    }
+
+    .paragraph {
+        @apply text-sm whitespace-nowrap;
+    }
+
+    /* mobile */
     @media (max-width: 699px) {
-        main {
-            @apply justify-start items-end h-fit m-[16px] p-[16px];
-        }
 
-        .subtext {
-            @apply text-xl text-end;
-        }
-
-        .paragraph {
-            @apply text-xs;
-        }
-
+        
         article {
             @apply w-full p-[8px] mt-0;
         }
+
+        .project_wrapper {
+            @apply flex-col flex p-[var(--mo-tb-gap)];
+        }
+
+        .project_item {
+            @apply flex-col;
+        }
+
+        .project_video {
+            @apply flex-1 w-full;
+        }
+
+        nav>a {
+            @apply hidden;
+        }
+
+        .menu_icon{
+            @apply block rounded-full border p-2;
+        }
+        
+        .contact_wrapper {
+            @apply hidden;
+        }
+
     }
 
     /* 태블릿: 700px~1199px */
     @media (min-width: 700px) and (max-width: 1199px) {
-        main {
+        /* main {
             @apply items-end justify-end;
+        } */
+
+        nav>a {
+            @apply hidden;
         }
 
-        .subtext {
-            @apply text-2xl text-end;
+        .contact_wrapper {
+            @apply hidden;
         }
 
         .specific_text {
@@ -172,6 +190,18 @@
 
         .hero {
             @apply text-sm;
+        }
+
+        .project_wrapper {
+            @apply flex-col flex p-[var(--mo-tb-gap)];
+        }
+
+        .project_video {
+            @apply flex-1 w-full;
+        }
+
+        .menu_icon{
+            @apply block rounded-full border p-2;
         }
     }
 }

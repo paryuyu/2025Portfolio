@@ -1,7 +1,6 @@
 function Contact() {
   return (
     <div className="contact_wrapper">
-     
         <svg
           stroke="currentColor"
           fill="currentColor"

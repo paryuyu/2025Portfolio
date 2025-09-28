@@ -7,7 +7,6 @@ import Home from './components/home';
 import Layout from './components/layout';
 import Projects from './components/projects';
 import { routes } from './utils/routes';
-import TransitionComponent from './utils/translationContext';
 
 function App() {
   return (
@@ -15,37 +14,28 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route element={<Layout />}>
-            TransitionComponent
             <Route
               path={routes.home}
               element={
-                <TransitionComponent>
-                  <Home />
-                </TransitionComponent>
+                <Home />
               }
             />
             <Route
               path={routes.projects}
               element={
-                <TransitionComponent>
-                  <Projects />
-                </TransitionComponent>
+                <Projects />
               }
             />
             <Route
               path={routes.about}
               element={
-                <TransitionComponent>
-                  <AboutMe />
-                </TransitionComponent>
+                <AboutMe />
               }
             />
             <Route
               path={routes.connect}
               element={
-                <TransitionComponent>
-                  <Connect />
-                </TransitionComponent>
+                <Connect />
               }
             />
           </Route>

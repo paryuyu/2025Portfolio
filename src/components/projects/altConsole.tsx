@@ -1,3 +1,4 @@
+import { projectInformation } from '../../utils/projects';
 import { icons } from '../assets/icons';
 
 const AltConsole = () => {
@@ -16,12 +17,16 @@ const AltConsole = () => {
     'axios',
   ];
 
+  const altConsoleInfo = projectInformation.find((data)=> data.projectNo === 1)
+
+
+
   return (
     <>
       <div className="flex justify-center items-start w-full">
         <div className="text-sm mb-2 flex-1 flex flex-col">
-          <span>project-001</span>
-          <span>교통 관제 모니터링 플랫폼</span>
+          <span>project-00{altConsoleInfo?.projectNo}</span>
+          <span>{altConsoleInfo?.projectName}</span>
           <span className="text-6xl">Alt Console V2</span>
 
           <div className="bg-red-50 mr-6 p-2 rounded-lg mt-4">
