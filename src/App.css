@@ -5,18 +5,31 @@
     src: url("/fonts/NotoSansKR-Var.ttf");
 }
 
+@font-face {
+    font-family: 'InkLiquid';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/InkLipquid.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'SchoolSafetyNotification';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2408-5@1.0/HakgyoansimAllimjangTTF-R.woff2') format('woff2');
+}
+
 @theme {
-    --main-color: #f95738;
-    --sub-color: #ee964b;
-    --sub2-color: #f4d35e;
-    --sub3-color: #0d3b66;
-    --background-color: #faf0ca;
+    --main-color: #dcf763;
+    --sub-color: #bfb7b6;
+    --sub2-color: #848c8e;
+    --sub3-color: #f1f2ee;
+    --background-color: #435058;
     --font-sans: NotoSans;
     --header-height: 80px;
     --pc-gap: 24px;
     --mo-tb-gap: 16px;
     --pc-font-size: 24px;
     --pc-hero-text-size: 48px;
+
+    --mobie: 699px;
+    --tablet: 1199px;
 }
 
 
@@ -30,6 +43,23 @@
 
 
 @layer components {
+    .nav_logo_text {
+        font-family: SchoolSafetyNotification;
+        font-weight: 900;
+        @apply text-4xl text-[var(--main-color)] overflow-hidden relative z-4 text-center;
+    }
+
+    .main_self_branding {
+        font-family: SchoolSafetyNotification;
+        font-weight: 900;
+        @apply text-4xl w-[68px] h-[40px] text-[var(--main-color)] ml-6 overflow-hidden relative z-4 block mt-6;
+    }
+
+    .green_ball {
+        @apply rounded-full h-16 w-full bg-[white]/30 absolute -bottom-8 z-0 -left-8;
+    }
+
+
     ::-webkit-scrollbar {
         display: none;
     }
@@ -43,10 +73,11 @@
     }
 
     header {
-        @apply h-[var(--header-height)] border-[var(--sub-color)] flex border-b;
+        @apply h-[var(--header-height)] bg-[var(--sub2-color)] flex;
     }
 
     nav {
+        font-family: SchoolSafetyNotification;
         @apply flex justify-start items-center gap-2 mx-[var(--pc-gap)];
     }
 
@@ -54,15 +85,45 @@
         @apply px-4 py-1 active:bg-[var(--background-color)]/15 h-fit p-2;
     }
 
-    .home_main{
-        @apply grid grid-cols-2 overflow-hidden;
+    .home_main {
+        @apply p-[24px] px-[60px] relative;
     }
 
-    .home_main_section{
-        @apply bg-[var(--sub2-color)]/70 items-start justify-center flex flex-col gap-[24px] px-[24px];
-        height: calc( 100dvh - var(--header-height));
+    .home_section {
+        @apply bg-[var(--sub2-color)] px-16 py-16 mt-[60px] z-4 static;
     }
-    
+
+    .home_section>h4 {
+        font-family: SchoolSafetyNotification;
+        @apply text-6xl px-6;
+    }
+
+    .home_name {
+        @apply text-lg pt-2 font-light -mt-2 px-6;
+    }
+
+    .main_bg_text {
+        font-family: SchoolSafetyNotification;
+        @apply text-[var(--sub3-color)]/10 text-7xl absolute top-6 -z-4
+    }
+
+    .power_line {
+        font-family: InkLiquid;
+        @apply px-16 text-6xl my-12 relative;
+    }
+
+    .bg_power_line{
+        @apply absolute fill-[var(--sub3-color)]/10 top-[400px] left-0 w-[1000px]
+    }
+
+    .signiture_box {
+        @apply border-y py-4 mt-6 px-6 text-xs relative;
+    }
+
+    .signiture_img{
+        @apply w-24 absolute -bottom-3 opacity-80 right-0;
+    }
+
     .skill_section {
         @apply flex flex-col border-b py-4 px-[40px];
     }
@@ -95,23 +156,6 @@
         @apply w-6 cursor-pointer;
     }
 
-
-    .project_menu {
-        @apply pb-4 pl-4 cursor-pointer whitespace-nowrap;
-    }
-
-    .project_menu.active {
-        @apply text-[var(--main-color)] font-bold;
-    }
-
-    .project_menu_wrap {
-        @apply flex m-[var(--pc-gap)] gap-2 border-b border-b-gray-300 overflow-x-scroll;
-    }
-
-    .project_wrapper {
-        @apply p-[var(--pc-gap)] gap-6 border;
-    }
-
     .project_item {
         @apply flex justify-center items-start w-full
     }
@@ -124,22 +168,53 @@
         @apply w-full z-[999] cursor-pointer;
     }
 
-    .menu_icon{
+    .menu_icon {
         @apply hidden;
+    }
+
+    .menu_icon>svg {
+        @apply fill-[var(--main-color)]
     }
 
     :where(.home_main) h1 {
         @apply text-9xl px-[24px] my-auto text-[var(--main-color)];
     }
 
-    .paragraph {
-        @apply text-sm whitespace-nowrap;
+    .menu_wrap {
+        @apply hidden;
     }
 
     /* mobile */
-    @media (max-width: 699px) {
+    @media (max-width: 700px) {
 
+        .home_main{
+            @apply px-[16px];
+        }
+
+        .main_bg_text{
+            @apply text-4xl;
+        }
         
+        .home_section{
+            @apply mt-[32px] p-[16px];
+        }
+
+        .home_section>h4{
+            @apply mx-0 px-0 text-5xl mt-6;
+        }
+
+        .home_name{
+            @apply mx-0 px-0;
+        }
+
+        .power_line{
+            @apply mx-0 px-0 text-3xl my-6;
+        }
+
+        .signiture_box{
+            @apply mx-0 px-2;
+        }
+
         article {
             @apply w-full p-[8px] mt-0;
         }
@@ -160,21 +235,77 @@
             @apply hidden;
         }
 
-        .menu_icon{
-            @apply block rounded-full border p-2;
+        .menu_icon {
+            @apply block rounded-full border p-2 cursor-pointer;
         }
-        
+
         .contact_wrapper {
             @apply hidden;
         }
 
+        .menu_wrap {
+            @apply block top-0 left-0 fixed h-dvh w-dvw z-[9999] bg-[var(--background-color)];
+        }
+
+        .menu_wrap>.close_icon {
+            @apply fill-[var(--main-color)] border w-fit float-end m-[16px] rounded-full p-2 cursor-pointer;
+        }
+
+        header {
+            @apply flex justify-between items-center w-full;
+        }
+
+        .main_self_branding {
+            @apply mt-0
+        }
     }
 
     /* 태블릿: 700px~1199px */
     @media (min-width: 700px) and (max-width: 1199px) {
-        /* main {
-            @apply items-end justify-end;
-        } */
+
+        .home_main{
+            @apply px-[16px];
+        }
+
+        .main_bg_text{
+            @apply text-4xl;
+        }
+        
+        .home_section{
+            @apply mt-[32px] p-[16px];
+        }
+
+        .home_section>h4{
+            @apply mx-0 px-0 text-5xl mt-6;
+        }
+
+        .home_name{
+            @apply mx-0 px-0;
+        }
+
+        .power_line{
+            @apply mx-0 px-0 text-3xl my-6;
+        }
+
+        .signiture_box{
+            @apply mx-0 px-2;
+        }
+
+        .main_self_branding {
+            @apply mt-0
+        }
+
+        .menu_wrap>.close_icon {
+            @apply fill-[var(--main-color)] border w-fit float-end m-[24px] rounded-full p-2;
+        }
+
+        .menu_wrap {
+            @apply block top-0 left-0 fixed h-dvh w-dvw z-[9999] bg-[var(--background-color)];
+        }
+
+        header {
+            @apply flex justify-between items-center w-full;
+        }
 
         nav>a {
             @apply hidden;
@@ -200,7 +331,7 @@
             @apply flex-1 w-full;
         }
 
-        .menu_icon{
+        .menu_icon {
             @apply block rounded-full border p-2;
         }
     }

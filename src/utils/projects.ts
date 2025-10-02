@@ -5,12 +5,15 @@ type project = {
   description: string;
   mainRole: string;
   contribution: string[];
-  projectVideoResources: string[];
+  thumnail:string;
+  projectVideoResources: string;
   period: {
     start: Date | string;
     end: Date | string;
   };
 };
+
+//썸네일 이미지 넣기
 export const usedSkills = {
   git: 'git',
   vite: 'vite',
@@ -59,7 +62,8 @@ export const projectInformation = [
       '아키텍처 설계부터 성능 최적화, UX 개선까지 전반적인 기술 리더십 발휘',
       '고객 요구에 따른 신규 기능 설계 및 개발을 지속적으로 수행하며 플랫폼 전반의 기능 확장',
     ],
-    projectVideoResources: ['/images/altconsole/altconsole.mp4'],
+    projectVideoResources: '/images/altconsole/altconsole.mp4',
+    thumnail:"/images/thumnails/console.svg",
     period: {
       start: new Date("2024-02-01"),
       end: new Date("2025-09-30"),
@@ -79,10 +83,12 @@ export const projectInformation = [
       usedSkills.axios,
     ],
     description: '교통 관제 모니터링 플랫폼',
+    thumnail:"/images/thumnails/console.svg",
     contribution: [
-     ""
+      "반응형 UI 개발 주도",
+      "중단되었던 UI/UX 개발에 참여하여 재진행"
     ],
-    projectVideoResources: ['/images/altconsole/altconsole.mp4'],
+    projectVideoResources: '',
     period: {
       start: new Date("2024-02-01"),
       end: new Date("2025-09-30"),
@@ -103,7 +109,8 @@ export const projectInformation = [
     contribution: [
         "사내 전용 서비스의 UI를 단독으로 설계 및 개발 (로그인, 대시보드, 결재/휴가 신청, 일정 관리)",
         "반응형 웹 적용으로 다양한 디바이스 환경에서 안정적인 동작 구현"],
-    projectVideoResources: ['/images/altgate/altgate.mp4'],
+    projectVideoResources: '/images/altgate/altgate.mp4',
+    thumnail:"/images/thumnails/altGate.svg",
     period: {
       start: new Date("2023-12-01"),
       end:  new Date( "2024-01-31"), 
@@ -119,14 +126,15 @@ export const projectInformation = [
       usedSkills.reactRouterDom,
       usedSkills.axios,
     ],
-    mainRole: "사내 모니터링 플랫폼 UI/UX 개발",
-    description: '사내 모니터링 플랫폼',
+    mainRole: "연구 과제 UI 컴포넌트 개발 및 지원",
+    description: '연구 과제',
     contribution: [   
         "팀 프로젝트에 중간에 투입되어 PWA 환경 도입 아이디어를 제안 및 환경 설정 및 서비스 워커 구현 주도",
         "디자인 가이드라인을 정확하게 준수하며 반응형 환경에 최적화된 UI 컴포넌트 개발",
         "다양한 디바이스 및 해상도에 대응하는 웹 인터페이스 개발 경험 축적",
         "팀원들과 협력하며 기술적 지식을 공유하고 프로젝트 성공에 기여"],
-    projectVideoResources: ['/images/altgate/altgate.mp4'],
+    projectVideoResources: '',
+    thumnail:"/images/thumnails/eavp.jpg",
     period: {
       start: new Date("2023-08-01"),
       end: new Date("2023-11-30"),
@@ -146,7 +154,8 @@ export const projectInformation = [
         "레거시 코드(jQuery 기반) 분석 및 개선",
         "안정적인 서비스 운영과 지속적 개선"
     ],
-    projectVideoResources: ['/images/altgate/altgate.mp4'],
+    projectVideoResources: '',
+    thumnail: "/images/thumnails/alta.png",
     period: {
       start: new Date("2023-08-01"),
       end: new Date("2023-11-30"),
@@ -164,6 +173,7 @@ export const projectInformation = [
         "디자인 시안에 따라 XML 레이아웃 구현",
         "다양한 화면 사이즈 및 해상도 대응",
     ],
+    thumnail:"/images/thumnails/ntlight.svg",
     period: {
       start: new Date("2023-08-01"),
       end: new Date("2023-11-30"),
