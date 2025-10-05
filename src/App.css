@@ -27,7 +27,6 @@
     --mo-tb-gap: 16px;
     --pc-font-size: 24px;
     --pc-hero-text-size: 48px;
-
     --mobie: 699px;
     --tablet: 1199px;
 }
@@ -43,6 +42,14 @@
 
 
 @layer components {
+    .QnA_input{
+        @apply bg-gray-200 border-gray-50 border h-[48px] w-full text-xs p-4 rounded-lg;
+    }
+
+    .QnA_content{
+        @apply h-[30dvh]
+    }
+
     .nav_logo_text {
         font-family: SchoolSafetyNotification;
         font-weight: 900;
@@ -124,6 +131,10 @@
         @apply w-24 absolute -bottom-3 opacity-80 right-0;
     }
 
+    .signiture_text{
+        @apply float-end mt-4 font-light uppercase mr-4;
+    }
+
     .skill_section {
         @apply flex flex-col border-b py-4 px-[40px];
     }
@@ -184,9 +195,29 @@
         @apply hidden;
     }
 
+
+    .project_wrapper {
+        @apply flex-col flex p-[24px] gap-[24px] w-[1200px] mx-auto;
+    }
+
+    .project_ticket{
+        @apply  max-w-[800px] w-[800px] h-[260px] mt-6 relative bg-white/20;
+    }
+    
+    .project_ticket:nth-child(odd){
+        @apply self-end
+    }
+
+    .project_ticket>.small_area_header{
+        @apply absolute  bg-black/50 h-[60px] w-[30%] py-2 pr-6 text-end;
+    }
+
+    .project_ticket>.wide_area_header{}
     /* mobile */
     @media (max-width: 700px) {
-
+        .project_ticket{
+            @apply border max-w-[800px] w-full h-[260px] mt-6 relative;
+        }
         .home_main{
             @apply px-[16px];
         }
@@ -220,8 +251,10 @@
         }
 
         .project_wrapper {
-            @apply flex-col flex p-[var(--mo-tb-gap)];
+            @apply flex-col flex w-dvw;
         }
+
+        
 
         .project_item {
             @apply flex-col;
@@ -324,8 +357,9 @@
         }
 
         .project_wrapper {
-            @apply flex-col flex p-[var(--mo-tb-gap)];
+            @apply flex-col flex w-dvw;
         }
+
 
         .project_video {
             @apply flex-1 w-full;

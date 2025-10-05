@@ -38,16 +38,13 @@ function Home() {
 
     gsap.from(".x-move", {
       opacity: 0,
-      duration:2,
-      xPercent:-100,
+      duration: 2,
+      yPercent: 100,
       ease: 'expo.out',
-      // stagger: 0.06,
-      // delay: 0.08,
     });
 
     gsap.from(".fade", {
       opacity: 0,
-      // yPercent: 100,
       duration: 1.8,
       ease: 'expo.out',
       stagger: 0.06,
@@ -86,9 +83,9 @@ function Home() {
             개발자로서 더 나은 사용자 경험과 성능을 제공하는 웹 서비스를 만드는 데
             기여하고 싶습니다.
           </span>
-          <img src="/images/signiture_b.png" alt="ss" className='signiture_img' />
+          <img src="/images/signiture_b.png" alt="ss" className='signiture_img fade' />
         </div>
-        <span className='float-end mt-4 font-ligh uppercase mr-4'>signiture</span>
+        <span className='signiture_text fade'>signiture</span>
 
       </section>
     </main>

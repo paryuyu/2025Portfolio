@@ -22,7 +22,7 @@ const Menu = () => {
             projects
          </NavLink>
          <NavLink to={routes.about} className="hover:underline" onClick={() => setMenu(false)}>
-            about
+         about
          </NavLink>
          <NavLink to={routes.connect} className="hover:underline" onClick={() => setMenu(false)}>
             connect

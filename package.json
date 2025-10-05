@@ -12,8 +12,10 @@
   "dependencies": {
     "@gsap/react": "^2.1.2",
     "@tailwindcss/vite": "^4.1.13",
+    "date-fns": "^4.1.0",
     "gsap": "^3.13.0",
     "jotai": "^2.15.0",
+    "ky": "^1.11.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^6.30.1",
