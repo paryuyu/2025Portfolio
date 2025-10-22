@@ -1,104 +1,119 @@
-import { useLayoutEffect, useRef, useState } from "react"
-import { gsap } from "gsap"
-import { Draggable } from "gsap/Draggable"
+import { useRef, useState } from "react"
 import ConnectForm from "./ConnectForm"
+import ProjectsWindow from "./ProjectsWindow"
+import AboutMeWindow from "./AboutMeWindow"
+import Dock from "./Dock"
+import DesktopApps from "./DesktopApps"
 
-gsap.registerPlugin(Draggable)
+interface AppWindow {
+  id: string
+  name: string
+  isOpen: boolean
+  isMinimized: boolean
+  size: "full" | 120
+  zIndex: number
+}
+
 function Connect() {
-  const [contactBox, setContactBox] = useState(true)
-  const [size, setSize] = useState<"full" | 120>("full")
-  const [hover, setHover] = useState(false)
+  const [openWindows, setOpenWindows] = useState<AppWindow[]>([
+    { id: "connect-form", name: "connect form", isOpen: false, isMinimized: false, size: 120, zIndex: 10 },
+    { id: "projects", name: "projects", isOpen: false, isMinimized: false, size: 120, zIndex: 10 },
+    { id: "about-me", name: "about me", isOpen: false, isMinimized: false, size: 120, zIndex: 10 }
+  ])
 
-  const boxRef = useRef<HTMLDivElement | null>(null)
-  const dragInstance = useRef<Draggable[]>([])
+  const connectFormRef = useRef<HTMLDivElement | null>(null)
+  const projectsWindowRef = useRef<HTMLDivElement | null>(null)
+  const aboutMeWindowRef = useRef<HTMLDivElement | null>(null)
 
-  const handleWide = () => setSize(size === "full" ? 120 : "full")
-  const handleToggle = () => setContactBox(p => !p)
-
-  useLayoutEffect(() => {
-    if (boxRef.current) {
-      dragInstance.current.forEach(d => d.kill())
-      dragInstance.current = []
-      dragInstance.current = Draggable.create(boxRef.current, {
-        type: "x,y",
-        bounds: window,
-        allowContextMenu: true,
-        onPress: function (e) {
-          const target = e.target as HTMLElement
-          if (
-            target.tagName === "INPUT" ||
-            target.tagName === "TEXTAREA" ||
-            target.isContentEditable
-          ) {
-            this.disable()
-          }
-        },
-        onRelease: function () {
-          this.enable()
-        },
-      })
-    }
-  }, [contactBox, size])
-
-  const handleHover = () => {
-    setHover(p => !p)
+  const handleAppDoubleClick = (appName: string) => {
+    setOpenWindows(prev =>
+      prev.map(win =>
+        win.name === appName ? { ...win, isOpen: true, isMinimized: false } : win
+      )
+    )
   }
 
-  return (
-    <div className="relative w-full h-dvh text-black overflow-hidden">
-      {/* 우측 연결 버튼 */}
-      <div className={`right-24 absolute bottom-1/2 z-0 flex flex-col justify-center items-center cursor-pointer`} onClick={handleHover}>
-        <div
-          className={`bg-green-400 w-fit p-2 rounded-xl shadow-2xl transition-all duration-200 ${hover ? "outline-offset-3 outline-2 outline-blue-500 grayscale-50" : ""}`}
-          onDoubleClick={() => setContactBox(true)}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="24px"
-            viewBox="0 0 24 24"
-            width="24px"
-            className="fill-white"
-          >
-            <path d="M0 0h24v24H0V0z" fill="none" />
-            <path d="M3.4 20.4l17.45-7.48c.81-.35.81-1.49 0-1.84L3.4 3.6c-.66-.29-1.39.2-1.39.91L2 9.12c0 .5.37.93.87.99L17 12 2.87 13.88c-.5.07-.87.5-.87 1l.01 4.61c0 .71.73 1.2 1.39.91z" />
-          </svg>
-        </div>
-        <div className={`text-xs mt-2 text-center text-white transition-all duration-200 ${hover ? "bg-blue-500 px-1 py-[0.5] rounded-md" : ""}`}>
-          connect
-        </div>
-      </div>
+  const handleDockAppClick = (appName: string) => {
+    setOpenWindows(prev =>
+      prev.map(win =>
+        win.name === appName ? { ...win, isOpen: true } : win
+      )
+    )
+  }
 
-      {/* ConnectForm 컴포넌트 */}
-      {contactBox && (
-        <ConnectForm 
-          ref={boxRef}
-          size={size} 
-          onClose={handleToggle} 
-          onToggleSize={handleWide} 
-        />
+  const toggleWindow = (windowId: string) => {
+    setOpenWindows(prev => 
+      prev.map(win => 
+        win.id === windowId ? { ...win, isOpen: !win.isOpen } : win
+      )
+    )
+  }
+
+  const toggleSize = (windowId: string) => {
+    setOpenWindows(prev =>
+      prev.map(win =>
+        win.id === windowId ? { ...win, size: win.size === "full" ? 120 : "full" } : win
+      )
+    )
+  }
+
+  const bringToFront = (windowId: string) => {
+    setOpenWindows(prev => {
+      const maxZ = Math.max(...prev.map(w => w.zIndex))
+      return prev.map(win =>
+        win.id === windowId ? { ...win, zIndex: maxZ + 1 } : win
+      )
+    })
+  }
+
+  const connectFormWindow = openWindows.find(w => w.id === "connect-form")
+  const projectsWindow = openWindows.find(w => w.id === "projects")
+  const aboutMeWindow = openWindows.find(w => w.id === "about-me")
+  const activeAppNames = openWindows.filter(w => w.isOpen).map(w => w.name)
+
+  return (
+    <div className="relative w-full h-dvh text-black overflow-hidden bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400">
+      {/* 바탕화면 앱 아이콘 (왼쪽 세로 정렬) */}
+      <DesktopApps onAppDoubleClick={handleAppDoubleClick} />
+
+      {/* ConnectForm 윈도우 */}
+      {connectFormWindow?.isOpen && !connectFormWindow.isMinimized && (
+        <div onMouseDown={() => bringToFront("connect-form")} style={{ zIndex: connectFormWindow.zIndex }}>
+          <ConnectForm 
+            ref={connectFormRef}
+            size={connectFormWindow.size} 
+            onClose={() => toggleWindow("connect-form")} 
+            onToggleSize={() => toggleSize("connect-form")} 
+          />
+        </div>
       )}
 
-      {/* 하단 푸터 */}
-      <footer className="bg-white/80 shadow-gray-500 shadow-xs rounded-xl p-2 fixed bottom-4 left-1/2 transform -translate-x-1/2 w-1/3">
-        <div className="mx-auto w-fit">
-          <div
-            className="bg-green-400 w-fit p-2 rounded-xl shadow-2xl cursor-pointer hover:bg-green-500 transition-colors"
-            onClick={handleToggle}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 0 24 24"
-              width="24px"
-              className="fill-white"
-            >
-              <path d="M0 0h24v24H0V0z" fill="none" />
-              <path d="M3.4 20.4l17.45-7.48c.81-.35.81-1.49 0-1.84L3.4 3.6c-.66-.29-1.39.2-1.39.91L2 9.12c0 .5.37.93.87.99L17 12 2.87 13.88c-.5.07-.87.5-.87 1l.01 4.61c0 .71.73 1.2 1.39.91z" />
-            </svg>
-          </div>
-          {contactBox && <div className="bg-gray-100 w-1 h-1 rounded-full mx-auto mt-1"></div>}
+      {/* ProjectsWindow 윈도우 */}
+      {projectsWindow?.isOpen && !projectsWindow.isMinimized && (
+        <div onMouseDown={() => bringToFront("projects")} style={{ zIndex: projectsWindow.zIndex }}>
+          <ProjectsWindow 
+            ref={projectsWindowRef}
+            size={projectsWindow.size} 
+            onClose={() => toggleWindow("projects")} 
+            onToggleSize={() => toggleSize("projects")} 
+          />
         </div>
-      </footer>
+      )}
+
+      {/* AboutMeWindow 윈도우 */}
+      {aboutMeWindow?.isOpen && !aboutMeWindow.isMinimized && (
+        <div onMouseDown={() => bringToFront("about-me")} style={{ zIndex: aboutMeWindow.zIndex }}>
+          <AboutMeWindow 
+            ref={aboutMeWindowRef}
+            size={aboutMeWindow.size} 
+            onClose={() => toggleWindow("about-me")} 
+            onToggleSize={() => toggleSize("about-me")} 
+          />
+        </div>
+      )}
+
+      {/* 맥 스타일 독(Dock) */}
+      <Dock activeApps={activeAppNames} onAppClick={handleDockAppClick} />
     </div>
   );
 }

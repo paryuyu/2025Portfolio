@@ -1,61 +1,46 @@
-import { useState, forwardRef, useLayoutEffect } from "react"
+import { forwardRef, useLayoutEffect, useState } from "react"
 import { gsap } from "gsap"
 import { Draggable } from "gsap/Draggable"
-import ky from "ky"
 
 gsap.registerPlugin(Draggable)
 
-interface ConnectFormProps {
+interface AboutMeWindowProps {
   size: "full" | 120
   onClose: () => void
   onToggleSize: () => void
 }
 
-const ConnectForm = forwardRef<HTMLDivElement, ConnectFormProps>(({ size, onClose, onToggleSize }, ref) => {
-  const [values, setValues] = useState({
-    company: "",
-    name: "",
-    mail: "",
-    phone: "",
-    content: ""
-  })
-
+const AboutMeWindow = forwardRef<HTMLDivElement, AboutMeWindowProps>(({ size, onClose, onToggleSize }, ref) => {
   const [isResizing, setIsResizing] = useState(false)
 
-  const handleText = (evt: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const value = evt.target.value
-    const name = evt.target.name
-
-    setValues(prev => ({ ...prev, [name]: value }))
-  }
-
-  const handleSubmit = async (evt: React.FormEvent) => {
-    evt.preventDefault()
-    const url = import.meta.env.VITE_GOOGLE_CHAT
-
-    const message = `
-📩 새 문의가 도착했습니다!
-🏢 소속: ${values.company || "소속없음"}
-👤 성함: ${values.name || "성함없음"}
-📧 메일: ${values.mail || "메일없음"}
-📱 연락처: ${values.phone || "연락처없음"}
-💬 문의 내용:
-${values.content || "문의내용없음"}
-`
-
-    try {
-      await ky
-        .post(url, {
-          json: { text: message },
-          headers: { "Content-Type": "application/json; charset=UTF-8" },
-        })
-        .json()
-
-      alert("전송되었습니다!")
-    } catch (err) {
-      alert("전송 실패!")
+  // 더미 커리어 데이터
+  const careerData = [
+    {
+      company: "Tech Corp",
+      position: "Senior Frontend Developer",
+      period: "2022.03 - Present",
+      description: "React, TypeScript 기반 웹 애플리케이션 개발 및 팀 리딩"
+    },
+    {
+      company: "Digital Agency",
+      position: "Frontend Developer",
+      period: "2020.01 - 2022.02",
+      description: "Vue.js를 활용한 다양한 클라이언트 프로젝트 수행"
+    },
+    {
+      company: "Startup Inc",
+      position: "Junior Developer",
+      period: "2018.06 - 2019.12",
+      description: "웹 서비스 개발 및 유지보수"
     }
-  }
+  ]
+
+  const skills = [
+    { category: "Frontend", items: ["React", "TypeScript", "Vue.js", "Next.js", "Tailwind CSS"] },
+    { category: "Backend", items: ["Node.js", "Express", "NestJS", "PostgreSQL"] },
+    { category: "DevOps", items: ["Docker", "AWS", "Github Actions", "Vercel"] },
+    { category: "Tools", items: ["Git", "Figma", "Notion", "Slack"] }
+  ]
 
   // 드래그 및 리사이즈 기능 초기화
   useLayoutEffect(() => {
@@ -178,7 +163,7 @@ ${values.content || "문의내용없음"}
           x: 0,
           y: 0,
           padding: "24px",
-          width: "600px",
+          width: "700px",
           height: "600px",
           ease: "power2.out"
         })
@@ -192,7 +177,7 @@ ${values.content || "문의내용없음"}
       className="absolute z-4"
       style={{
         padding: size === "full" ? "0" : "24px",
-        width: size === "full" ? "100vw" : "600px",
+        width: size === "full" ? "100vw" : "700px",
         height: size === "full" ? "calc(100vh - 40px - 96px)" : "600px",
         top: size === "full" ? "40px" : "16px",
         left: size === "full" ? "0" : "16px",
@@ -214,67 +199,63 @@ ${values.content || "문의내용없음"}
             title="크기 조절"
           ></div>
         </div>
-        <span className="text-black font-light text-sm">Connect Yuyu</span>
+        <span className="text-black font-light text-sm">About Me</span>
       </div>
 
-      {/* 폼 내용 */}
-      <div className="bg-white p-[24px] rounded-b-lg shadow-2xl h-full flex flex-col">
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <input 
-            type="text" 
-            className="QnA_input" 
-            placeholder="소속" 
-            value={values.company} 
-            onChange={handleText} 
-            name="company" 
-          />
-          <input 
-            type="text" 
-            className="QnA_input" 
-            placeholder="성함" 
-            value={values.name} 
-            onChange={handleText} 
-            name="name" 
-          />
-          <input 
-            type="email" 
-            className="QnA_input" 
-            placeholder="메일" 
-            value={values.mail} 
-            onChange={handleText} 
-            name="mail" 
-          />
-          <input 
-            type="tel" 
-            className="QnA_input" 
-            placeholder="연락처" 
-            value={values.phone} 
-            onChange={handleText} 
-            name="phone" 
-          />
+      {/* 컨텐츠 영역 */}
+      <div className="bg-white p-6 rounded-b-lg shadow-2xl overflow-y-auto" style={{ height: "calc(100% - 52px)" }}>
+        {/* 프로필 섹션 */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold mb-4 text-gray-800">Profile</h2>
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <p className="text-gray-700 mb-2"><strong>Name:</strong> Yuyu</p>
+            <p className="text-gray-700 mb-2"><strong>Role:</strong> Full Stack Developer</p>
+            <p className="text-gray-700 mb-2"><strong>Location:</strong> Seoul, South Korea</p>
+            <p className="text-gray-700"><strong>Email:</strong> yuyu@example.com</p>
+          </div>
         </div>
-        <textarea 
-          className="QnA_input QnA_content" 
-          placeholder="문의 내용" 
-          value={values.content} 
-          onChange={handleText} 
-          name="content" 
-        />
-        <p className="text-red-700 opacity-80 text-xs mb-2">
-          이메일과 소속, 문의내용은 필수 값입니다. 꼭 기재부탁드립니다. 비방 및 장난 연락은 추후 법적조치가 있을 수 있습니다.
-        </p>
-        <button 
-          className="bg-[var(--background-color)] text-sm drop-shadow-2xl font-semibold text-white w-full p-3 rounded-lg cursor-pointer hover:opacity-90 transition-opacity" 
-          type="submit"
-          onClick={handleSubmit}
-        >
-          전송하기
-        </button>
+
+        {/* 커리어 섹션 */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold mb-4 text-gray-800">Career</h2>
+          <div className="space-y-4">
+            {careerData.map((career, index) => (
+              <div key={index} className="border-l-4 border-blue-500 pl-4 py-2">
+                <h3 className="text-lg font-semibold text-gray-800">{career.company}</h3>
+                <p className="text-sm text-gray-600">{career.position}</p>
+                <p className="text-xs text-gray-500 mb-2">{career.period}</p>
+                <p className="text-sm text-gray-700">{career.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 스킬 섹션 */}
+        <div>
+          <h2 className="text-2xl font-bold mb-4 text-gray-800">Skills</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {skills.map((skillGroup, index) => (
+              <div key={index} className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="font-semibold text-gray-800 mb-2">{skillGroup.category}</h3>
+                <div className="flex flex-wrap gap-2">
+                  {skillGroup.items.map((item, idx) => (
+                    <span
+                      key={idx}
+                      className="bg-white px-3 py-1 rounded-full text-sm text-gray-700 border border-gray-200"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   )
 })
 
-ConnectForm.displayName = 'ConnectForm'
+AboutMeWindow.displayName = 'AboutMeWindow'
 
-export default ConnectForm
+export default AboutMeWindow
