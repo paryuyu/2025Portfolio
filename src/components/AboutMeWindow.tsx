@@ -1,6 +1,7 @@
 import { forwardRef, useLayoutEffect, useState } from "react"
 import { gsap } from "gsap"
 import { Draggable } from "gsap/Draggable"
+import { careerData } from "../utils/career"
 
 gsap.registerPlugin(Draggable)
 
@@ -12,28 +13,6 @@ interface AboutMeWindowProps {
 
 const AboutMeWindow = forwardRef<HTMLDivElement, AboutMeWindowProps>(({ size, onClose, onToggleSize }, ref) => {
   const [isResizing, setIsResizing] = useState(false)
-
-  // 더미 커리어 데이터
-  const careerData = [
-    {
-      company: "Tech Corp",
-      position: "Senior Frontend Developer",
-      period: "2022.03 - Present",
-      description: "React, TypeScript 기반 웹 애플리케이션 개발 및 팀 리딩"
-    },
-    {
-      company: "Digital Agency",
-      position: "Frontend Developer",
-      period: "2020.01 - 2022.02",
-      description: "Vue.js를 활용한 다양한 클라이언트 프로젝트 수행"
-    },
-    {
-      company: "Startup Inc",
-      position: "Junior Developer",
-      period: "2018.06 - 2019.12",
-      description: "웹 서비스 개발 및 유지보수"
-    }
-  ]
 
   const skills = [
     { category: "Frontend", items: ["React", "TypeScript", "Vue.js", "Next.js", "Tailwind CSS"] },
@@ -56,50 +35,42 @@ const AboutMeWindow = forwardRef<HTMLDivElement, AboutMeWindowProps>(({ size, on
         trigger: dragHandle,
       })[0]
 
-      // Resize functionality
-      let startWidth = 0
-      let startHeight = 0
-      let startX = 0
-      let startY = 0
+      // Resize functionality - 우측 하단 핸들만 사용
+      const resizeHandle = element.querySelector('.resize-handle') as HTMLElement
+      
+      if (resizeHandle) {
+        let startWidth = 0
+        let startHeight = 0
+        let startX = 0
+        let startY = 0
 
-      const handleMouseDown = (e: MouseEvent) => {
-        const rect = element.getBoundingClientRect()
-        const edge = 10
-        
-        const isRight = e.clientX >= rect.right - edge
-        const isBottom = e.clientY >= rect.bottom - edge
-        
-        if (isRight || isBottom) {
+        const handleMouseDown = (e: MouseEvent) => {
           e.preventDefault()
           e.stopPropagation()
           setIsResizing(true)
           
+          const rect = element.getBoundingClientRect()
           startWidth = rect.width
           startHeight = rect.height
           startX = e.clientX
           startY = e.clientY
           
-          document.body.style.cursor = isRight && isBottom ? 'nwse-resize' : 
-                                       isRight ? 'ew-resize' : 'ns-resize'
+          document.body.style.cursor = 'nwse-resize'
           
           const handleMouseMove = (e: MouseEvent) => {
             const deltaX = e.clientX - startX
             const deltaY = e.clientY - startY
             
-            if (isRight) {
-              const newWidth = Math.max(400, Math.min(window.innerWidth - 100, startWidth + deltaX))
-              element.style.width = `${newWidth}px`
-            }
-            if (isBottom) {
-              const newHeight = Math.max(300, Math.min(window.innerHeight - 100, startHeight + deltaY))
-              element.style.height = `${newHeight}px`
-            }
+            const newWidth = Math.max(400, Math.min(window.innerWidth - 100, startWidth + deltaX))
+            const newHeight = Math.max(300, Math.min(window.innerHeight - 100, startHeight + deltaY))
+            
+            element.style.width = `${newWidth}px`
+            element.style.height = `${newHeight}px`
           }
           
           const handleMouseUp = () => {
             setIsResizing(false)
             document.body.style.cursor = ''
-            element.style.cursor = ''
             document.removeEventListener('mousemove', handleMouseMove)
             document.removeEventListener('mouseup', handleMouseUp)
           }
@@ -107,35 +78,17 @@ const AboutMeWindow = forwardRef<HTMLDivElement, AboutMeWindowProps>(({ size, on
           document.addEventListener('mousemove', handleMouseMove)
           document.addEventListener('mouseup', handleMouseUp)
         }
-      }
 
-      const handleMouseMove = (e: MouseEvent) => {
-        if (isResizing) return
-        
-        const rect = element.getBoundingClientRect()
-        const edge = 10
-        
-        const isRight = e.clientX >= rect.right - edge
-        const isBottom = e.clientY >= rect.bottom - edge
-        
-        if (isRight && isBottom) {
-          element.style.cursor = 'nwse-resize'
-        } else if (isRight) {
-          element.style.cursor = 'ew-resize'
-        } else if (isBottom) {
-          element.style.cursor = 'ns-resize'
-        } else {
-          element.style.cursor = ''
+        resizeHandle.addEventListener('mousedown', handleMouseDown)
+
+        return () => {
+          dragInstance.kill()
+          resizeHandle.removeEventListener('mousedown', handleMouseDown)
         }
       }
 
-      element.addEventListener('mousedown', handleMouseDown)
-      element.addEventListener('mousemove', handleMouseMove)
-
       return () => {
         dragInstance.kill()
-        element.removeEventListener('mousedown', handleMouseDown)
-        element.removeEventListener('mousemove', handleMouseMove)
       }
     }
   }, [ref, size, isResizing])
@@ -147,12 +100,12 @@ const AboutMeWindow = forwardRef<HTMLDivElement, AboutMeWindowProps>(({ size, on
         gsap.to(ref.current, {
           duration: 0.3,
           left: 0,
-          top: "40px",
+          top: 0,
           x: 0,
           y: 0,
           padding: 0,
           width: "100vw",
-          height: "calc(100vh - 40px - 96px)",
+          height: "calc(100vh)",
           ease: "power2.out"
         })
       } else {
@@ -209,9 +162,9 @@ const AboutMeWindow = forwardRef<HTMLDivElement, AboutMeWindowProps>(({ size, on
           <h2 className="text-2xl font-bold mb-4 text-gray-800">Profile</h2>
           <div className="bg-gray-50 p-4 rounded-lg">
             <p className="text-gray-700 mb-2"><strong>Name:</strong> Yuyu</p>
-            <p className="text-gray-700 mb-2"><strong>Role:</strong> Full Stack Developer</p>
+            <p className="text-gray-700 mb-2"><strong>Role:</strong> Frontend Developer</p>
             <p className="text-gray-700 mb-2"><strong>Location:</strong> Seoul, South Korea</p>
-            <p className="text-gray-700"><strong>Email:</strong> yuyu@example.com</p>
+            <p className="text-gray-700"><strong>Email:</strong> u_00y@naver.com</p>
           </div>
         </div>
 
@@ -252,6 +205,19 @@ const AboutMeWindow = forwardRef<HTMLDivElement, AboutMeWindowProps>(({ size, on
           </div>
         </div>
       </div>
+
+      {/* 리사이즈 핸들 */}
+      {size !== "full" && (
+        <div
+          className="resize-handle absolute w-8 h-8 cursor-se-resize flex items-center justify-center bg-gray-200/10 rounded-sm"
+          style={{ 
+            bottom: "30px",
+            right: "24px",
+            zIndex: 100
+          }}
+        >
+        </div>
+      )}
     </div>
   )
 })

@@ -50,12 +50,6 @@
         @apply h-[30dvh]
     }
 
-    .nav_logo_text {
-        font-family: SchoolSafetyNotification;
-        font-weight: 900;
-        @apply text-4xl text-[var(--main-color)] overflow-hidden relative z-4 text-center;
-    }
-
     .main_self_branding {
         font-family: SchoolSafetyNotification;
         font-weight: 900;
@@ -80,33 +74,7 @@
     }
 
     header {
-        @apply h-[var(--header-height)] bg-white border-b border-gray-200 flex shadow-sm;
-    }
-
-    nav {
-        font-family: SchoolSafetyNotification;
-        @apply flex justify-start items-center gap-2 mx-[var(--pc-gap)];
-    }
-
-    nav>a {
-        @apply px-4 py-1 active:bg-gray-100 hover:bg-gray-50 h-fit p-2 rounded-md transition-colors;
-    }
-
-    .home_main {
-        @apply p-[24px] px-[60px] relative;
-    }
-
-    .home_section {
-        @apply bg-gray-50 border border-gray-200 rounded-lg px-16 py-16 mt-[60px] z-4 static;
-    }
-
-    .home_section>h4 {
-        font-family: SchoolSafetyNotification;
-        @apply text-6xl px-6;
-    }
-
-    .home_name {
-        @apply text-lg pt-2 font-light -mt-2 px-6;
+        @apply h-[var(--header-height)] bg-white border-b border-gray-200 flex shadow-md;
     }
 
     .main_bg_text {
@@ -114,30 +82,6 @@
         @apply text-[var(--sub3-color)]/10 text-7xl absolute top-6 -z-4
     }
 
-    .power_line {
-        font-family: InkLiquid;
-        @apply px-16 text-6xl my-12 relative;
-    }
-
-    .bg_power_line{
-        @apply absolute fill-[var(--sub3-color)]/10 top-[400px] left-0 w-[1000px]
-    }
-
-    .signiture_box {
-        @apply border-y py-4 mt-6 px-6 text-xs relative;
-    }
-
-    .signiture_img{
-        @apply w-24 absolute -bottom-3 opacity-80 right-0;
-    }
-
-    .signiture_text{
-        @apply float-end mt-4 font-light uppercase mr-4;
-    }
-
-    .skill_section {
-        @apply flex flex-col border-b py-4 px-[40px];
-    }
 
     .skill_list {
         @apply flex w-full mt-[var(--pc-gap)] flex-wrap gap-4;
@@ -264,10 +208,6 @@
             @apply flex-1 w-full;
         }
 
-        nav>a {
-            @apply hidden;
-        }
-
         .menu_icon {
             @apply block rounded-full border p-2 cursor-pointer;
         }
@@ -338,10 +278,6 @@
 
         header {
             @apply flex justify-between items-center w-full;
-        }
-
-        nav>a {
-            @apply hidden;
         }
 
         .contact_wrapper {
