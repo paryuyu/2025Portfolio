@@ -1,61 +1,19 @@
-import { useState, forwardRef, useLayoutEffect } from "react"
+import { forwardRef, useLayoutEffect, useState } from "react"
 import { gsap } from "gsap"
 import { Draggable } from "gsap/Draggable"
-import ky from "ky"
+import { networkingEvents } from "../utils/networking"
 
 gsap.registerPlugin(Draggable)
 
-interface ConnectFormProps {
+interface NetworkingWindowProps {
   size: "full" | 120
   onClose: () => void
   onToggleSize: () => void
 }
 
-const ConnectForm = forwardRef<HTMLDivElement, ConnectFormProps>(({ size, onClose, onToggleSize }, ref) => {
-  const [values, setValues] = useState({
-    company: "",
-    name: "",
-    mail: "",
-    phone: "",
-    content: ""
-  })
-
+const NetworkingWindow = forwardRef<HTMLDivElement, NetworkingWindowProps>(({ size, onClose, onToggleSize }, ref) => {
+  const [selectedEvent, setSelectedEvent] = useState(networkingEvents[0])
   const [isResizing, setIsResizing] = useState(false)
-
-  const handleText = (evt: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const value = evt.target.value
-    const name = evt.target.name
-
-    setValues(prev => ({ ...prev, [name]: value }))
-  }
-
-  const handleSubmit = async (evt: React.FormEvent) => {
-    evt.preventDefault()
-    const url = import.meta.env.VITE_GOOGLE_CHAT
-
-    const message = `
-📩 새 문의가 도착했습니다!
-🏢 소속: ${values.company || "소속없음"}
-👤 성함: ${values.name || "성함없음"}
-📧 메일: ${values.mail || "메일없음"}
-📱 연락처: ${values.phone || "연락처없음"}
-💬 문의 내용:
-${values.content || "문의내용없음"}
-`
-
-    try {
-      await ky
-        .post(url, {
-          json: { text: message },
-          headers: { "Content-Type": "application/json; charset=UTF-8" },
-        })
-        .json()
-
-      alert("전송되었습니다!")
-    } catch (err) {
-      alert("문의내용을 작성해주세요.")
-    }
-  }
 
   // 드래그 및 리사이즈 기능 초기화
   useLayoutEffect(() => {
@@ -152,7 +110,7 @@ ${values.content || "문의내용없음"}
           x: 0,
           y: 0,
           padding: "24px",
-          width: "600px",
+          width: "700px",
           height: "600px",
           ease: "power2.out"
         })
@@ -166,7 +124,7 @@ ${values.content || "문의내용없음"}
       className="absolute z-4"
       style={{
         padding: size === "full" ? "0" : "24px",
-        width: size === "full" ? "100vw" : "600px",
+        width: size === "full" ? "100vw" : "700px",
         height: size === "full" ? "calc(100vh - 44px)" : "600px",
         top: size === "full" ? "0" : "16px",
         left: size === "full" ? "0" : "16px",
@@ -188,62 +146,80 @@ ${values.content || "문의내용없음"}
             title="크기 조절"
           ></div>
         </div>
-        <span className="text-black font-light text-sm">Connect Yuyu</span>
+        <span className="text-black font-light text-sm">Networking Events</span>
       </div>
 
-      {/* 폼 내용 */}
-      <div className="bg-white p-[24px] rounded-b-lg shadow-2xl h-full flex flex-col">
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <input 
-            type="text" 
-            className="QnA_input" 
-            placeholder="소속" 
-            value={values.company} 
-            onChange={handleText} 
-            name="company" 
-          />
-          <input 
-            type="text" 
-            className="QnA_input" 
-            placeholder="성함" 
-            value={values.name} 
-            onChange={handleText} 
-            name="name" 
-          />
-          <input 
-            type="email" 
-            className="QnA_input" 
-            placeholder="메일" 
-            value={values.mail} 
-            onChange={handleText} 
-            name="mail" 
-          />
-          <input 
-            type="tel" 
-            className="QnA_input" 
-            placeholder="연락처" 
-            value={values.phone} 
-            onChange={handleText} 
-            name="phone" 
-          />
+      {/* 네트워킹 이벤트 내용 */}
+      <div className="bg-white rounded-b-lg shadow-2xl overflow-hidden flex" style={{ height: "calc(100% - 44px)" }}>
+        {/* 이벤트 목록 */}
+        <div className="w-1/3 bg-gray-50 border-r border-gray-200 overflow-y-auto">
+          <div className="p-4">
+            <h3 className="text-sm font-semibold text-gray-600 mb-3">이벤트 목록</h3>
+            <div className="space-y-2">
+              {networkingEvents.map((event) => (
+                <div
+                  key={event.id}
+                  className={`p-3 rounded-lg cursor-pointer transition-all duration-200 ${
+                    selectedEvent.id === event.id
+                      ? "bg-blue-500 text-white shadow-md"
+                      : "bg-white hover:bg-gray-100 text-gray-700"
+                  }`}
+                  onClick={() => setSelectedEvent(event)}
+                >
+                  <div className="font-semibold text-sm mb-1">{event.title}</div>
+                  <div className="text-xs opacity-80">{event.date}</div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-        <textarea 
-          className="QnA_input QnA_content" 
-          placeholder="문의 내용" 
-          value={values.content} 
-          onChange={handleText} 
-          name="content" 
-        />
-        <p className="text-red-700 opacity-80 text-xs mb-2">
-          이메일과 소속, 문의내용은 필수 값입니다. 꼭 기재부탁드립니다. 비방 및 장난 연락은 추후 법적조치가 있을 수 있습니다.
-        </p>
-        <button 
-          className="text-sm bg-gray-200 w-full p-3 rounded-lg cursor-pointer hover:bg-gray-300" 
-          type="submit"
-          onClick={handleSubmit}
-        >
-          전송하기
-        </button>
+
+        {/* 이벤트 상세 정보 */}
+        <div className="flex-1 p-6 overflow-y-auto">
+          <div className="max-w-3xl">
+            {/* 이벤트 헤더 */}
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                {selectedEvent.title}
+              </h2>
+              <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
+                <div className="flex items-center gap-1">
+                  <span className="font-semibold">📅</span>
+                  <span>{selectedEvent.date}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="font-semibold">📍</span>
+                  <span>{selectedEvent.location}</span>
+                </div>
+              </div>
+              <p className="text-gray-700 leading-relaxed">{selectedEvent.description}</p>
+            </div>
+
+            {/* 주요 하이라이트 */}
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-gray-800 mb-3">주요 하이라이트</h3>
+              <ul className="space-y-2">
+                {selectedEvent.highlights.map((highlight, index) => (
+                  <li key={index} className="flex items-start gap-2">
+                    <span className="text-blue-500 mt-1">✓</span>
+                    <span className="text-gray-700 text-sm leading-relaxed">{highlight}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* 추가 정보 */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="text-sm font-semibold text-gray-600 mb-2">네트워킹 성과</h3>
+              <p className="text-gray-700 text-sm leading-relaxed">
+                다양한 분야의 전문가들과 교류하며 실무 경험을 공유하고, 
+                최신 기술 트렌드에 대한 인사이트를 얻었습니다. 
+                이러한 네트워킹 활동을 통해 개발자로서의 시야를 넓히고 
+                협업 기회를 발굴할 수 있었습니다.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* 리사이즈 핸들 */}
@@ -262,6 +238,6 @@ ${values.content || "문의내용없음"}
   )
 })
 
-ConnectForm.displayName = 'ConnectForm'
+NetworkingWindow.displayName = 'NetworkingWindow'
 
-export default ConnectForm
+export default NetworkingWindow

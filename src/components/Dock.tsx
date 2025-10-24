@@ -9,6 +9,10 @@ interface DockProps {
 function Dock({ activeApps, onAppClick }: DockProps) {
   const [hoveredApp, setHoveredApp] = useState<string | null>(null)
 
+  const handleMouseEnter = (appName: string) => {
+    setHoveredApp(appName)
+  }
+
   return (
     <footer className="bg-white/80 backdrop-blur-md shadow-lg rounded-2xl p-3 fixed bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
       {apps.map((app) => {
@@ -16,11 +20,13 @@ function Dock({ activeApps, onAppClick }: DockProps) {
         const isHovered = hoveredApp === app.name
         
         return (
-          <div key={app.name} className="flex flex-col items-center gap-1">
+          <div key={app.name} className="flex flex-col items-center gap-1 relative">
             <div
-              className="relative w-14 h-14 rounded-xl cursor-pointer hover:scale-110 transition-transform duration-200 overflow-hidden"
+              className={`relative w-14 h-14 rounded-xl cursor-pointer overflow-hidden transition-all duration-200 ${
+                isHovered ? 'animate-bounce-once' : ''
+              }`}
               onClick={() => onAppClick(app.name)}
-              onMouseEnter={() => setHoveredApp(app.name)}
+              onMouseEnter={() => handleMouseEnter(app.name)}
               onMouseLeave={() => setHoveredApp(null)}
             >
               <img 
@@ -28,13 +34,13 @@ function Dock({ activeApps, onAppClick }: DockProps) {
                 alt={app.name}
                 className="w-full h-full object-cover"
               />
-              {isHovered && (
-                <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs font-medium px-3 py-1.5 rounded-lg whitespace-nowrap shadow-lg">
-                  {app.name}
-                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
-                </div>
-              )}
             </div>
+            {isHovered && (
+              <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 bg-gray-100 text-xs font-mono p-2 rounded-lg whitespace-nowrap z-50">
+                {app.name}
+                <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full w-0 h-0 border-l-8 border-r-8 border-t-8 border-transparent border-t-gray-100"></div>
+              </div>
+            )}
             {isAppOpen && (
               <div className="w-1 h-1 rounded-full bg-gray-700"></div>
             )}

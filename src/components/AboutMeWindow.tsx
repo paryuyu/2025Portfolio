@@ -105,7 +105,7 @@ const AboutMeWindow = forwardRef<HTMLDivElement, AboutMeWindowProps>(({ size, on
           y: 0,
           padding: 0,
           width: "100vw",
-          height: "calc(100vh)",
+          height: "calc(100vh - 44px)",
           ease: "power2.out"
         })
       } else {
@@ -131,8 +131,8 @@ const AboutMeWindow = forwardRef<HTMLDivElement, AboutMeWindowProps>(({ size, on
       style={{
         padding: size === "full" ? "0" : "24px",
         width: size === "full" ? "100vw" : "700px",
-        height: size === "full" ? "calc(100vh - 40px - 96px)" : "600px",
-        top: size === "full" ? "40px" : "16px",
+        height: size === "full" ? "calc(100vh - 44px)" : "600px",
+        top: size === "full" ? "0" : "16px",
         left: size === "full" ? "0" : "16px",
         transform: "none"
       }}
@@ -156,7 +156,7 @@ const AboutMeWindow = forwardRef<HTMLDivElement, AboutMeWindowProps>(({ size, on
       </div>
 
       {/* 컨텐츠 영역 */}
-      <div className="bg-white p-6 rounded-b-lg shadow-2xl overflow-y-auto" style={{ height: "calc(100% - 52px)" }}>
+      <div className="bg-white p-6 rounded-b-lg shadow-2xl overflow-y-auto" style={{ height: "calc(100% - 44px)" }}>
         {/* 프로필 섹션 */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold mb-4 text-gray-800">Profile</h2>

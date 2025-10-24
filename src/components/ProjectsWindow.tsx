@@ -99,7 +99,7 @@ const ProjectsWindow = forwardRef<HTMLDivElement, ProjectsWindowProps>(({ size, 
           y: 0,
           padding: 0,
           width: "100vw",
-          height: "calc(100vh - 40px - 96px)",
+          height: "calc(100vh - 44px)",
           ease: "power2.out"
         })
       } else {
@@ -125,8 +125,8 @@ const ProjectsWindow = forwardRef<HTMLDivElement, ProjectsWindowProps>(({ size, 
       style={{
         padding: size === "full" ? "0" : "24px",
         width: size === "full" ? "100vw" : "600px",
-        height: size === "full" ? "calc(100vh - 40px - 96px)" : "500px",
-        top: size === "full" ? "40px" : "16px",
+        height: size === "full" ? "calc(100vh - 44px)" : "500px",
+        top: size === "full" ? "0" : "16px",
         left: size === "full" ? "0" : "16px",
         transform: "none"
       }}
@@ -150,7 +150,7 @@ const ProjectsWindow = forwardRef<HTMLDivElement, ProjectsWindowProps>(({ size, 
       </div>
 
       {/* 프로젝트 내용 */}
-      <div className="bg-white rounded-b-lg shadow-2xl h-full flex overflow-hidden">
+      <div className="bg-white rounded-b-lg shadow-2xl flex overflow-hidden" style={{ height: "calc(100% - 44px)" }}>
         {/* 왼쪽 사이드바 - 프로젝트 목록 */}
         <div className="w-64 bg-gray-50 border-r border-gray-200 overflow-y-auto">
           <div className="p-4">

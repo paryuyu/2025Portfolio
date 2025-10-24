@@ -1,7 +1,7 @@
 import { Provider } from 'jotai';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
-import Connect from './components/connect';
+import Desktop from './components/Desktop';
 import Layout from './components/layout';
 import { routes } from './utils/routes';
 
@@ -15,14 +15,14 @@ function App() {
             <Route
               path={routes.home}
               element={
-                <Connect />
+                <Desktop />
               }
             />
        
             <Route
               path={routes.window}
               element={
-                <Connect />
+                <Desktop />
               }
             />
           </Route>

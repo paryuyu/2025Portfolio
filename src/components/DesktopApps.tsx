@@ -69,7 +69,7 @@ function DesktopApps({ onAppDoubleClick }: DesktopAppsProps) {
   }, [])
 
   return (
-    <div className="absolute  z-0" style={{ width: '100px', height: '100%' }}>
+    <div className="absolute z-0" style={{ width: '100px', height: '100%', top: '56px', left: '16px' }}>
       {apps.map((app, index) => (
         <div
           key={app.name}
@@ -82,7 +82,7 @@ function DesktopApps({ onAppDoubleClick }: DesktopAppsProps) {
           style={{ 
             width: '80px',
             position: 'absolute',
-            top: `${index * 100}px`,
+            top: `${index * 116}px`,
             left: 0,
             willChange: 'transform'
           }}
