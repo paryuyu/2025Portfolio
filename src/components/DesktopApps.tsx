@@ -74,16 +74,16 @@ function DesktopApps({ onAppDoubleClick }: DesktopAppsProps) {
         <div
           key={app.name}
           ref={(el) => { appRefs.current[index] = el }}
-          className={`flex flex-col items-center gap-1 p-2 rounded-lg cursor-move ${
-            selectedApp === app.name ? "bg-blue-500/30" : "hover:bg-white/10"
+          className={`flex flex-col items-center rounded-lg cursor-move ${
+            selectedApp === app.name ? "" : "hover:bg-white/10"
           }`}
           onClick={() => setSelectedApp(app.name)}
           onDoubleClick={() => onAppDoubleClick(app.name)}
           style={{
-            width: '80px',
+            width: '52px',
             position: 'absolute',
-            top: `${index * 116}px`,
-            left: 0,
+            top: `${index * 92}px`,
+            left: 8,
             willChange: 'transform'
           }}
         >

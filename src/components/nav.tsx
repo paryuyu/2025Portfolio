@@ -7,7 +7,7 @@ const Nav = () => {
   return (
     <>
       <nav>
-        <NavLink to={routes.window} >
+        <NavLink to={routes.window} className={"text-xs font-mono"}>
           yu.dev
         </NavLink>
       </nav>

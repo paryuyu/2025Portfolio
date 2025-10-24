@@ -39,8 +39,8 @@ function Desktop() {
 
   const [stickyNote, setStickyNote] = useState<StickyNote>({
     id: "sticky-note",
-    x: 200,
-    y: 80,
+    x: 0,
+    y: 60,
     width: 320,
     height: 280,
     zIndex: 5
@@ -193,7 +193,7 @@ function Desktop() {
   }, [])
 
   return (
-    <div className="fixed inset-0 w-full h-screen text-black overflow-hidden bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400">
+    <div className="fixed inset-0 w-full h-screen text-black overflow-hidden bg-gradient-to-br from-gray-100 via-gray-100 to-gray-50">
       {/* 바탕화면 앱 아이콘 (왼쪽 세로 정렬) */}
       <DesktopApps onAppDoubleClick={handleAppDoubleClick} />
 
