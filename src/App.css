@@ -333,4 +333,11 @@
     .animate-fade-in {
         animation: fade-in 0.2s ease-out;
     }
+
+    .no-select {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+    }
 }

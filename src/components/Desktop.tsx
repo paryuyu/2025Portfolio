@@ -1,10 +1,15 @@
-import { useRef, useState } from "react"
+import { useRef, useState, useLayoutEffect, useEffect } from "react"
+import { gsap } from "gsap"
+import { Draggable } from "gsap/Draggable"
 import ConnectForm from "./ConnectForm"
 import ProjectsWindow from "./ProjectsWindow"
 import AboutMeWindow from "./AboutMeWindow"
 import NetworkingWindow from "./NetworkingWindow"
 import Dock from "./Dock"
 import DesktopApps from "./DesktopApps"
+import { stickerMemo } from "../utils/stickerMemo"
+
+gsap.registerPlugin(Draggable)
 
 interface AppWindow {
   id: string
@@ -12,6 +17,15 @@ interface AppWindow {
   isOpen: boolean
   isMinimized: boolean
   size: "full" | 120
+  zIndex: number
+}
+
+interface StickyNote {
+  id: string
+  x: number
+  y: number
+  width: number
+  height: number
   zIndex: number
 }
 
@@ -23,10 +37,28 @@ function Desktop() {
     { id: "networking", name: "networking", isOpen: false, isMinimized: false, size: 120, zIndex: 10 }
   ])
 
+  const [stickyNote, setStickyNote] = useState<StickyNote>({
+    id: "sticky-note",
+    x: 200,
+    y: 80,
+    width: 320,
+    height: 280,
+    zIndex: 5
+  })
+
+  // 스티커 초기 위치 설정
+  useEffect(() => {
+    setStickyNote(prev => ({
+      ...prev,
+      x: window.innerWidth - 360
+    }))
+  }, [])
+
   const connectFormRef = useRef<HTMLDivElement | null>(null)
   const projectsWindowRef = useRef<HTMLDivElement | null>(null)
   const aboutMeWindowRef = useRef<HTMLDivElement | null>(null)
   const networkingWindowRef = useRef<HTMLDivElement | null>(null)
+  const stickyNoteRef = useRef<HTMLDivElement | null>(null)
 
   const handleAppDoubleClick = (appName: string) => {
     setOpenWindows(prev =>
@@ -61,12 +93,20 @@ function Desktop() {
   }
 
   const bringToFront = (windowId: string) => {
-    setOpenWindows(prev => {
-      const maxZ = Math.max(...prev.map(w => w.zIndex))
-      return prev.map(win =>
-        win.id === windowId ? { ...win, zIndex: maxZ + 1 } : win
+    const maxZ = Math.max(
+      ...openWindows.map(w => w.zIndex),
+      stickyNote.zIndex
+    )
+
+    if (windowId === "sticky-note") {
+      setStickyNote(prev => ({ ...prev, zIndex: maxZ + 1 }))
+    } else {
+      setOpenWindows(prev =>
+        prev.map(win =>
+          win.id === windowId ? { ...win, zIndex: maxZ + 1 } : win
+        )
       )
-    })
+    }
   }
 
   const connectFormWindow = openWindows.find(w => w.id === "connect-form")
@@ -75,10 +115,109 @@ function Desktop() {
   const networkingWindow = openWindows.find(w => w.id === "networking")
   const activeAppNames = openWindows.filter(w => w.isOpen).map(w => w.name)
 
+  // 스티커 메모 드래그 기능
+  useLayoutEffect(() => {
+    if (stickyNoteRef.current) {
+      const dragInstance = Draggable.create(stickyNoteRef.current, {
+        type: "x,y",
+        bounds: window,
+        edgeResistance: 0.65,
+        throwProps: true,
+        zIndexBoost: false,
+        onDragStart: function() {
+          bringToFront("sticky-note")
+        }
+      })[0]
+
+      return () => {
+        dragInstance.kill()
+      }
+    }
+  }, [])
+
+  // 스티커 메모 리사이즈 기능
+  useLayoutEffect(() => {
+    if (stickyNoteRef.current) {
+      const element = stickyNoteRef.current
+      const resizeHandle = element.querySelector('.resize-handle') as HTMLElement
+
+      if (resizeHandle) {
+        let startWidth = 0
+        let startHeight = 0
+        let startX = 0
+        let startY = 0
+
+        const handleMouseDown = (e: MouseEvent) => {
+          e.preventDefault()
+          e.stopPropagation()
+
+          const rect = element.getBoundingClientRect()
+          startWidth = rect.width
+          startHeight = rect.height
+          startX = e.clientX
+          startY = e.clientY
+
+          document.body.style.cursor = 'nwse-resize'
+
+          const handleMouseMove = (e: MouseEvent) => {
+            const deltaX = e.clientX - startX
+            const deltaY = e.clientY - startY
+
+            const newWidth = Math.max(250, Math.min(window.innerWidth - 100, startWidth + deltaX))
+            const newHeight = Math.max(200, Math.min(window.innerHeight - 100, startHeight + deltaY))
+
+            setStickyNote(prev => ({
+              ...prev,
+              width: newWidth,
+              height: newHeight
+            }))
+          }
+
+          const handleMouseUp = () => {
+            document.body.style.cursor = ''
+            document.removeEventListener('mousemove', handleMouseMove)
+            document.removeEventListener('mouseup', handleMouseUp)
+          }
+
+          document.addEventListener('mousemove', handleMouseMove)
+          document.addEventListener('mouseup', handleMouseUp)
+        }
+
+        resizeHandle.addEventListener('mousedown', handleMouseDown)
+
+        return () => {
+          resizeHandle.removeEventListener('mousedown', handleMouseDown)
+        }
+      }
+    }
+  }, [])
+
   return (
     <div className="fixed inset-0 w-full h-screen text-black overflow-hidden bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400">
       {/* 바탕화면 앱 아이콘 (왼쪽 세로 정렬) */}
       <DesktopApps onAppDoubleClick={handleAppDoubleClick} />
+
+      {/* 스티커 메모 */}
+      <div
+        ref={stickyNoteRef}
+        onMouseDown={() => bringToFront("sticky-note")}
+        className="absolute cursor-move transition-shadow duration-200"
+        style={{
+          left: stickyNote.x,
+          top: stickyNote.y,
+          width: stickyNote.width,
+          height: stickyNote.height,
+          zIndex: stickyNote.zIndex
+        }}
+      >
+        {/* 스티커 내용 */}
+        <div
+          className="bg-blue-50 p-3 border border-blue-100 text-xs text-gray-700 leading-relaxed whitespace-pre-line no-select"
+        >
+          {stickerMemo}
+        </div>
+
+      </div>
 
       {/* ConnectForm 윈도우 */}
       {connectFormWindow?.isOpen && !connectFormWindow.isMinimized && (

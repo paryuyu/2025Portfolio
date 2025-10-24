@@ -19,7 +19,7 @@ function DesktopApps({ onAppDoubleClick }: DesktopAppsProps) {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement
       const isAppClick = appRefs.current.some(ref => ref?.contains(target))
-      
+
       if (!isAppClick) {
         setSelectedApp(null)
       }
@@ -79,7 +79,7 @@ function DesktopApps({ onAppDoubleClick }: DesktopAppsProps) {
           }`}
           onClick={() => setSelectedApp(app.name)}
           onDoubleClick={() => onAppDoubleClick(app.name)}
-          style={{ 
+          style={{
             width: '80px',
             position: 'absolute',
             top: `${index * 116}px`,
@@ -88,8 +88,8 @@ function DesktopApps({ onAppDoubleClick }: DesktopAppsProps) {
           }}
         >
           <div className="pointer-events-none">
-            <img 
-              src={app.image} 
+            <img
+              src={app.image}
               alt={app.name}
               className={`${selectedApp === app.name ? "grayscale-50" : ""} w-full h-full object-cover`}
             />

@@ -8,7 +8,7 @@ const Nav = () => {
     <>
       <nav>
         <NavLink to={routes.window} >
-          dev
+          yu.dev
         </NavLink>
       </nav>
 
