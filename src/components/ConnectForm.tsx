@@ -137,8 +137,8 @@ ${values.content || "문의내용없음"}
           duration: 0.3,
           left: 0,
           top: 0,
-          x: 0,
-          y: 0,
+          x:  0,
+          y: '40px',
           padding: 0,
           width: "100vw",
           height: "calc(100vh - 44px)",
@@ -163,7 +163,7 @@ ${values.content || "문의내용없음"}
   return (
     <div
       ref={ref}
-      className="absolute z-4"
+      className="absolute z-4 "
       style={{
         padding: size === "full" ? "0" : "24px",
         width: size === "full" ? "100vw" : "600px",

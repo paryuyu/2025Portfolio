@@ -18,7 +18,7 @@ function Layout() {
 
   return (
     <>
-      <header className="flex items-center justify-between font-mono px-4">
+      <header className="flex items-center justify-between w-full font-mono px-4 z-50 fixed">
         <Nav />
         <span className="text-xs font-light text-gray-700">{formatDate(currentTime, 'yyyy-MM-dd HH:mm:ss')}</span>
       </header>

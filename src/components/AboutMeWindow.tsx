@@ -102,7 +102,7 @@ const AboutMeWindow = forwardRef<HTMLDivElement, AboutMeWindowProps>(({ size, on
           left: 0,
           top: 0,
           x: 0,
-          y: 0,
+          y: '40px',
           padding: 0,
           width: "100vw",
           height: "calc(100vh - 44px)",
