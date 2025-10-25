@@ -1,11 +1,20 @@
 import { Outlet } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Nav from './nav';
-import { useDevice } from '../utils/mediaQuery';
 import { formatDate } from 'date-fns';
 
 function Layout() {
-  useDevice()
+  useEffect(() => {
+    const handleResize = () => {
+      // Device detection logic for layout adjustments if needed
+      console.log('Layout resize:', window.innerWidth)
+    }
+
+    handleResize()
+    window.addEventListener('resize', handleResize)
+
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
   const [currentTime, setCurrentTime] = useState(new Date())
 
   useEffect(() => {
@@ -18,7 +27,7 @@ function Layout() {
 
   return (
     <>
-      <header className="flex items-center justify-between w-full font-mono px-4 z-50 fixed">
+      <header className="flex items-center justify-between w-full font-mono px-4 z-10 fixed">
         <Nav />
         <span className="text-xs font-light text-gray-700">{formatDate(currentTime, 'yyyy-MM-dd HH:mm:ss')}</span>
       </header>

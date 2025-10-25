@@ -47,7 +47,7 @@
     }
 
     .QnA_content{
-        @apply h-[30dvh]
+        @apply h-full;
     }
 
     .main_self_branding {
@@ -156,9 +156,22 @@
         @apply absolute  bg-black/50 h-[60px] w-[30%] py-2 pr-6 text-end;
     }
 
-    .project_ticket>.wide_area_header{}
-    /* mobile */
+   footer{
+    @apply bg-white/80 backdrop-blur-md shadow-lg rounded-2xl p-3 fixed bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-1;
+   }
+
+   .app_wrapper{
+    @apply flex flex-col items-center gap-1 relative;
+   }
+
+   .app_icon{
+    @apply relative w-14 h-14 rounded-xl cursor-pointer overflow-hidden transition-all duration-200;
+   }
     @media (max-width: 700px) {
+
+        footer{
+            
+        }
         .project_ticket{
             @apply border border-gray-200 rounded-lg max-w-[800px] w-full h-[260px] mt-6 relative bg-gray-50;
         }

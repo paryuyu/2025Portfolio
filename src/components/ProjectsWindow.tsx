@@ -9,9 +9,10 @@ interface ProjectsWindowProps {
   size: "full" | 120
   onClose: () => void
   onToggleSize: () => void
+  isMobile?: boolean
 }
 
-const ProjectsWindow = forwardRef<HTMLDivElement, ProjectsWindowProps>(({ size, onClose, onToggleSize }, ref) => {
+const ProjectsWindow = forwardRef<HTMLDivElement, ProjectsWindowProps>(({ size, onClose, onToggleSize, isMobile }, ref) => {
   const [selectedProject, setSelectedProject] = useState(projectInformation[0])
   const [isResizing, setIsResizing] = useState(false)
 
@@ -99,7 +100,7 @@ const ProjectsWindow = forwardRef<HTMLDivElement, ProjectsWindowProps>(({ size, 
           y: '40px',
           padding: 0,
           width: "100vw",
-          height: "calc(100vh - 44px)",
+          height: `calc(100vh - ${isMobile ? 86 : 44}px)`,
           ease: "power2.out"
         })
       } else {
@@ -125,7 +126,7 @@ const ProjectsWindow = forwardRef<HTMLDivElement, ProjectsWindowProps>(({ size, 
       style={{
         padding: size === "full" ? "0" : "24px",
         width: size === "full" ? "100vw" : "600px",
-        height: size === "full" ? "calc(100vh - 44px)" : "500px",
+        height: size === "full" ? `calc(100vh - ${isMobile ? 86 : 44}px)` : "500px",
         top: size === "full" ? "0" : "16px",
         left: size === "full" ? "0" : "16px",
         transform: "none"
@@ -139,7 +140,7 @@ const ProjectsWindow = forwardRef<HTMLDivElement, ProjectsWindowProps>(({ size, 
             onClick={onClose}
             title="닫기"
           ></div>
-          <div className="bg-gray-300 w-3 h-3 rounded-full cursor-pointer hover:bg-gray-400 transition-colors" title="최소화"></div>
+          <div className="bg-gray-300 w-3 h-3 rounded-full cursor-pointer transition-colors" title="최소화"></div>
           <div
             className="bg-green-500 w-3 h-3 rounded-full cursor-pointer hover:bg-green-600 transition-colors"
             onClick={onToggleSize}
@@ -183,7 +184,7 @@ const ProjectsWindow = forwardRef<HTMLDivElement, ProjectsWindowProps>(({ size, 
         </div>
 
         {/* 오른쪽 - 프로젝트 상세 정보 */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className={`flex-1 overflow-y-auto p-6 ${size === "full" && isMobile ? 'pb-[66px]' : ''}`}>
           <div className="max-w-3xl">
             {/* 프로젝트 헤더 */}
             <div className="mb-6">

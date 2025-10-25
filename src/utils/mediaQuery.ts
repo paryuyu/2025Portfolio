@@ -3,13 +3,13 @@ import { deviceAtom } from "./atoms";
 import { useEffect } from "react";
 
 export const useDevice = () => {
-   const [ , setDevice] = useAtom<"mobile" | "tablet" | "pc">(deviceAtom);
+   const [device, setDevice] = useAtom<"mobile" | "tablet" | "pc">(deviceAtom);
    const width = {
       mobile: 699,
       tablet: 1199,
    }
    useEffect(() => {
-      console.log('working----!')
+      console.log('useDevice working----!')
       if (typeof window !== undefined) {
          const handleResize = () => {
             const innerWidth = window.innerWidth;
@@ -31,5 +31,7 @@ export const useDevice = () => {
          window.addEventListener("resize", handleResize);
          return ()=> window.removeEventListener("resize", handleResize)
       }
-   }, [])
+   }, [setDevice])
+
+   return device;
 }

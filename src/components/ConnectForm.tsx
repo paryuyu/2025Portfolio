@@ -9,9 +9,10 @@ interface ConnectFormProps {
   size: "full" | 120
   onClose: () => void
   onToggleSize: () => void
+  isMobile?: boolean
 }
 
-const ConnectForm = forwardRef<HTMLDivElement, ConnectFormProps>(({ size, onClose, onToggleSize }, ref) => {
+const ConnectForm = forwardRef<HTMLDivElement, ConnectFormProps>(({ size, onClose, onToggleSize, isMobile }, ref) => {
   const [values, setValues] = useState({
     company: "",
     name: "",
@@ -141,7 +142,7 @@ ${values.content || "문의내용없음"}
           y: '40px',
           padding: 0,
           width: "100vw",
-          height: "calc(100vh - 44px)",
+          height: `calc(100vh - ${isMobile ? 122 : 80}px)`,
           ease: "power2.out"
         })
       } else {
@@ -167,7 +168,7 @@ ${values.content || "문의내용없음"}
       style={{
         padding: size === "full" ? "0" : "24px",
         width: size === "full" ? "100vw" : "600px",
-        height: size === "full" ? "calc(100vh - 44px)" : "600px",
+        height: size === "full" ? `calc(100vh - ${isMobile ? 132 : 90}px)` : "600px",
         top: size === "full" ? "0" : "16px",
         left: size === "full" ? "0" : "16px",
         transform: "none"
@@ -190,9 +191,10 @@ ${values.content || "문의내용없음"}
         </div>
         <span className="text-black font-light text-sm">Connect Yuyu</span>
       </div>
-
+   
       {/* 폼 내용 */}
-      <div className="bg-white p-[24px] rounded-b-lg shadow-2xl h-full flex flex-col">
+      <div className={`bg-white p-[24px] rounded-b-lg shadow-2xl h-full flex flex-col ${size === "full" && isMobile ? 'pb-[66px]' : ''}`}>
+              <h2 className="text-2xl font-bold mb-4 text-gray-800">Contact yuyu</h2>
         <div className="grid grid-cols-2 gap-4 mb-4">
           <input 
             type="text" 
@@ -234,11 +236,8 @@ ${values.content || "문의내용없음"}
           onChange={handleText} 
           name="content" 
         />
-        <p className="text-red-700 opacity-80 text-xs mb-2">
-          이메일과 소속, 문의내용은 필수 값입니다. 꼭 기재부탁드립니다. 비방 및 장난 연락은 추후 법적조치가 있을 수 있습니다.
-        </p>
         <button 
-          className="text-sm bg-gray-200 w-full p-3 rounded-lg cursor-pointer hover:bg-gray-300" 
+          className="text-sm bg-gray-200 w-full p-3 rounded-lg cursor-pointer hover:bg-gray-300 mt-4" 
           type="submit"
           onClick={handleSubmit}
         >

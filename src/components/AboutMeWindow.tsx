@@ -9,9 +9,10 @@ interface AboutMeWindowProps {
   size: "full" | 120
   onClose: () => void
   onToggleSize: () => void
+  isMobile?: boolean
 }
 
-const AboutMeWindow = forwardRef<HTMLDivElement, AboutMeWindowProps>(({ size, onClose, onToggleSize }, ref) => {
+const AboutMeWindow = forwardRef<HTMLDivElement, AboutMeWindowProps>(({ size, onClose, onToggleSize, isMobile }, ref) => {
   const [isResizing, setIsResizing] = useState(false)
 
   const skills = [
@@ -105,7 +106,7 @@ const AboutMeWindow = forwardRef<HTMLDivElement, AboutMeWindowProps>(({ size, on
           y: '40px',
           padding: 0,
           width: "100vw",
-          height: "calc(100vh - 44px)",
+          height: `calc(100vh - ${isMobile ? 82 : 40}px)`,
           ease: "power2.out"
         })
       } else {
@@ -131,7 +132,7 @@ const AboutMeWindow = forwardRef<HTMLDivElement, AboutMeWindowProps>(({ size, on
       style={{
         padding: size === "full" ? "0" : "24px",
         width: size === "full" ? "100vw" : "700px",
-        height: size === "full" ? "calc(100vh - 44px)" : "600px",
+        height: size === "full" ? `calc(100vh - ${isMobile ? 82 : 40}px)` : "600px",
         top: size === "full" ? "0" : "16px",
         left: size === "full" ? "0" : "16px",
         transform: "none"
@@ -156,7 +157,7 @@ const AboutMeWindow = forwardRef<HTMLDivElement, AboutMeWindowProps>(({ size, on
       </div>
 
       {/* 컨텐츠 영역 */}
-      <div className="bg-white p-6 rounded-b-lg shadow-2xl overflow-y-auto" style={{ height: "calc(100% - 44px)" }}>
+      <div className={`bg-white p-6 rounded-b-lg shadow-2xl overflow-y-auto ${size === "full" && isMobile ? 'pb-[66px]' : ''}`} style={{ height: "calc(100% - 44px)" }}>
         {/* 프로필 섹션 */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold mb-4 text-gray-800">Profile</h2>

@@ -1,4 +1,4 @@
-import { useRef, useState, useLayoutEffect, useEffect } from "react"
+import { useRef, useState, useLayoutEffect, useEffect, useCallback } from "react"
 import { gsap } from "gsap"
 import { Draggable } from "gsap/Draggable"
 import ConnectForm from "./ConnectForm"
@@ -30,11 +30,25 @@ interface StickyNote {
 }
 
 function Desktop() {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = typeof window !== 'undefined' && window.innerWidth <= 699
+      setIsMobile(mobile)
+      console.log("Mobile check:", mobile, "Window width:", window.innerWidth)
+    }
+
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
   const [openWindows, setOpenWindows] = useState<AppWindow[]>([
-    { id: "connect-form", name: "connect", isOpen: false, isMinimized: false, size: 120, zIndex: 10 },
-    { id: "projects", name: "projects", isOpen: false, isMinimized: false, size: 120, zIndex: 10 },
-    { id: "about-me", name: "about me", isOpen: false, isMinimized: false, size: 120, zIndex: 10 },
-    { id: "networking", name: "networking", isOpen: false, isMinimized: false, size: 120, zIndex: 10 }
+    { id: "connect-form", name: "connect", isOpen: false, isMinimized: false, size: 120, zIndex: 1 },
+    { id: "projects", name: "projects", isOpen: false, isMinimized: false, size: 120, zIndex: 1 },
+    { id: "about-me", name: "about me", isOpen: false, isMinimized: false, size: 120, zIndex: 1 },
+    { id: "networking", name: "networking", isOpen: false, isMinimized: false, size: 120, zIndex: 1 }
   ])
 
   const [stickyNote, setStickyNote] = useState<StickyNote>({
@@ -43,7 +57,7 @@ function Desktop() {
     y: 60,
     width: 320,
     height: 280,
-    zIndex: 5
+    zIndex: 1
   })
 
   // 스티커 초기 위치 설정
@@ -61,38 +75,92 @@ function Desktop() {
   const stickyNoteRef = useRef<HTMLDivElement | null>(null)
 
   const handleAppDoubleClick = (appName: string) => {
-    setOpenWindows(prev =>
-      prev.map(win =>
-        win.name === appName ? { ...win, isOpen: true, isMinimized: false } : win
+    console.log("handleAppDoubleClick - isMobile:", isMobile, "appName:", appName)
+
+    if (isMobile) {
+      console.log("Mobile mode - maximizing window")
+      // 모바일에서는 최대화 + 맨 위로
+      setOpenWindows(prev =>
+        prev.map(win =>
+          win.name === appName
+            ? { ...win, isOpen: true, isMinimized: false, size: "full", zIndex: 9999 }
+            : win
+        )
       )
-    )
+    } else {
+      console.log("Desktop mode - normal window")
+      // 데스크톱에서는 기본 설정
+      setOpenWindows(prev =>
+        prev.map(win =>
+          win.name === appName ? { ...win, isOpen: true, isMinimized: false, size: 120 } : win
+        )
+      )
+    }
   }
 
   const handleDockAppClick = (appName: string) => {
-    setOpenWindows(prev =>
-      prev.map(win =>
-        win.name === appName ? { ...win, isOpen: true } : win
+    console.log("handleDockAppClick - isMobile:", isMobile, "appName:", appName)
+    if (isMobile) {
+      console.log("Mobile mode - maximizing window from dock")
+      // 모바일에서는 최대화 + 맨 위로
+      setOpenWindows(prev =>
+        prev.map(win =>
+          win.name === appName
+            ? { ...win, isOpen: true, isMinimized: false, size: "full", zIndex: 9999 }
+            : win
+        )
       )
-    )
+    } else {
+      console.log("Desktop mode - normal window from dock")
+      // 데스크톱에서는 기본 설정
+      setOpenWindows(prev =>
+        prev.map(win =>
+          win.name === appName ? { ...win, isOpen: true, isMinimized: false, size: 120 } : win
+        )
+      )
+    }
   }
 
   const toggleWindow = (windowId: string) => {
-    setOpenWindows(prev => 
-      prev.map(win => 
-        win.id === windowId ? { ...win, isOpen: !win.isOpen } : win
-      )
+    setOpenWindows(prev =>
+      prev.map(win => {
+        if (win.id === windowId) {
+          const willOpen = !win.isOpen
+          if (willOpen && isMobile) {
+            // 모바일에서 열 때 최대화 + 맨 위로
+            return { ...win, isOpen: true, size: "full", zIndex: 1000 }
+          } else if (willOpen) {
+            // 데스크톱에서 열 때 기본 크기
+            return { ...win, isOpen: true, size: 120 }
+          } else {
+            // 닫을 때
+            return { ...win, isOpen: false }
+          }
+        }
+        return win
+      })
     )
   }
 
   const toggleSize = (windowId: string) => {
     setOpenWindows(prev =>
-      prev.map(win =>
-        win.id === windowId ? { ...win, size: win.size === "full" ? 120 : "full" } : win
-      )
+      prev.map(win => {
+        if (win.id === windowId) {
+          const newSize: "full" | 120 = win.size === "full" ? 120 : "full"
+          if (isMobile && newSize === "full") {
+            // 모바일에서 최대화될 때 맨 위로
+            return { ...win, size: "full", zIndex: 1000 }
+          } else {
+            // 그 외에는 기본 z-index
+            return { ...win, size: newSize }
+          }
+        }
+        return win
+      })
     )
   }
 
-  const bringToFront = (windowId: string) => {
+  const bringToFront = useCallback((windowId: string) => {
     const maxZ = Math.max(
       ...openWindows.map(w => w.zIndex),
       stickyNote.zIndex
@@ -107,13 +175,14 @@ function Desktop() {
         )
       )
     }
-  }
+  }, [openWindows, stickyNote.zIndex])
 
   const connectFormWindow = openWindows.find(w => w.id === "connect-form")
   const projectsWindow = openWindows.find(w => w.id === "projects")
   const aboutMeWindow = openWindows.find(w => w.id === "about-me")
   const networkingWindow = openWindows.find(w => w.id === "networking")
   const activeAppNames = openWindows.filter(w => w.isOpen).map(w => w.name)
+  const hasMaximizedWindow = openWindows.some(w => w.isOpen && w.size === "full")
 
   // 스티커 메모 드래그 기능
   useLayoutEffect(() => {
@@ -222,11 +291,12 @@ function Desktop() {
       {/* ConnectForm 윈도우 */}
       {connectFormWindow?.isOpen && !connectFormWindow.isMinimized && (
         <div onMouseDown={() => bringToFront("connect-form")} style={{ zIndex: connectFormWindow.zIndex }}>
-          <ConnectForm 
+          <ConnectForm
             ref={connectFormRef}
-            size={connectFormWindow.size} 
-            onClose={() => toggleWindow("connect-form")} 
-            onToggleSize={() => toggleSize("connect-form")} 
+            size={connectFormWindow.size}
+            onClose={() => toggleWindow("connect-form")}
+            onToggleSize={() => toggleSize("connect-form")}
+            isMobile={isMobile}
           />
         </div>
       )}
@@ -234,11 +304,12 @@ function Desktop() {
       {/* ProjectsWindow 윈도우 */}
       {projectsWindow?.isOpen && !projectsWindow.isMinimized && (
         <div onMouseDown={() => bringToFront("projects")} style={{ zIndex: projectsWindow.zIndex }}>
-          <ProjectsWindow 
+          <ProjectsWindow
             ref={projectsWindowRef}
-            size={projectsWindow.size} 
-            onClose={() => toggleWindow("projects")} 
-            onToggleSize={() => toggleSize("projects")} 
+            size={projectsWindow.size}
+            onClose={() => toggleWindow("projects")}
+            onToggleSize={() => toggleSize("projects")}
+            isMobile={isMobile}
           />
         </div>
       )}
@@ -246,11 +317,12 @@ function Desktop() {
       {/* AboutMeWindow 윈도우 */}
       {aboutMeWindow?.isOpen && !aboutMeWindow.isMinimized && (
         <div onMouseDown={() => bringToFront("about-me")} style={{ zIndex: aboutMeWindow.zIndex }}>
-          <AboutMeWindow 
+          <AboutMeWindow
             ref={aboutMeWindowRef}
-            size={aboutMeWindow.size} 
-            onClose={() => toggleWindow("about-me")} 
-            onToggleSize={() => toggleSize("about-me")} 
+            size={aboutMeWindow.size}
+            onClose={() => toggleWindow("about-me")}
+            onToggleSize={() => toggleSize("about-me")}
+            isMobile={isMobile}
           />
         </div>
       )}
@@ -258,17 +330,20 @@ function Desktop() {
       {/* NetworkingWindow 윈도우 */}
       {networkingWindow?.isOpen && !networkingWindow.isMinimized && (
         <div onMouseDown={() => bringToFront("networking")} style={{ zIndex: networkingWindow.zIndex }}>
-          <NetworkingWindow 
+          <NetworkingWindow
             ref={networkingWindowRef}
-            size={networkingWindow.size} 
-            onClose={() => toggleWindow("networking")} 
-            onToggleSize={() => toggleSize("networking")} 
+            size={networkingWindow.size}
+            onClose={() => toggleWindow("networking")}
+            onToggleSize={() => toggleSize("networking")}
+            isMobile={isMobile}
           />
         </div>
       )}
 
       {/* 맥 스타일 독(Dock) */}
-      <Dock activeApps={activeAppNames} onAppClick={handleDockAppClick} />
+      <div style={{ zIndex: 1 }}>
+        <Dock activeApps={activeAppNames} onAppClick={handleDockAppClick} hasMaximizedWindow={hasMaximizedWindow} />
+      </div>
     </div>
   );
 }

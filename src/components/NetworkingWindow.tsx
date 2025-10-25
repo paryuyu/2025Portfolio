@@ -9,9 +9,10 @@ interface NetworkingWindowProps {
   size: "full" | 120
   onClose: () => void
   onToggleSize: () => void
+  isMobile?: boolean
 }
 
-const NetworkingWindow = forwardRef<HTMLDivElement, NetworkingWindowProps>(({ size, onClose, onToggleSize }, ref) => {
+const NetworkingWindow = forwardRef<HTMLDivElement, NetworkingWindowProps>(({ size, onClose, onToggleSize, isMobile }, ref) => {
   const [selectedEvent, setSelectedEvent] = useState(networkingEvents[0])
   const [isResizing, setIsResizing] = useState(false)
 
@@ -99,7 +100,7 @@ const NetworkingWindow = forwardRef<HTMLDivElement, NetworkingWindowProps>(({ si
           y: '40px',
           padding: 0,
           width: "100vw",
-          height: "calc(100vh - 44px)",
+          height: `calc(100vh - ${isMobile ? 86 : 44}px)`,
           ease: "power2.out"
         })
       } else {
@@ -125,7 +126,7 @@ const NetworkingWindow = forwardRef<HTMLDivElement, NetworkingWindowProps>(({ si
       style={{
         padding: size === "full" ? "0" : "24px",
         width: size === "full" ? "100vw" : "700px",
-        height: size === "full" ? "calc(100vh - 44px)" : "600px",
+        height: size === "full" ? `calc(100vh - ${isMobile ? 86 : 44}px)` : "600px",
         top: size === "full" ? "0" : "16px",
         left: size === "full" ? "0" : "16px",
         transform: "none"
@@ -175,7 +176,7 @@ const NetworkingWindow = forwardRef<HTMLDivElement, NetworkingWindowProps>(({ si
         </div>
 
         {/* 이벤트 상세 정보 */}
-        <div className="flex-1 p-6 overflow-y-auto">
+        <div className={`flex-1 p-6 overflow-y-auto ${size === "full" && isMobile ? 'pb-[66px]' : ''}`}>
           <div className="max-w-3xl">
             {/* 이벤트 헤더 */}
             <div className="mb-6">
