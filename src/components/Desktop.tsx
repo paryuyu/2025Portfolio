@@ -54,19 +54,38 @@ function Desktop() {
   const [stickyNote, setStickyNote] = useState<StickyNote>({
     id: "sticky-note",
     x: 0,
-    y: 60,
+    y: 60, // 기본값 (useLayoutEffect에서 즉시 올바른 위치로 업데이트)
     width: 320,
     height: 280,
     zIndex: 1
   })
 
-  // 스티커 초기 위치 설정
-  useEffect(() => {
-    setStickyNote(prev => ({
-      ...prev,
-      x: window.innerWidth - 360
-    }))
-  }, [])
+  // 스티커 위치 업데이트 - isMobile 변경 시에만 실행
+  useLayoutEffect(() => {
+    if (typeof window === 'undefined' || !window.innerWidth) return
+
+    if (isMobile) {
+      // 모바일: 하단 중앙에 위치, footer 위쪽에 배치
+      const footerHeight = 50 // footer 높이 추정
+      const margin = 15 // 여백
+      setStickyNote(prev => ({
+        ...prev,
+        x: Math.max(0, (window.innerWidth - 280) / 2), // 중앙 정렬 (음수 방지)
+        y: Math.max(60, window.innerHeight - 400), // footer 위쪽에 배치
+        width: 280,
+        height: 100 
+      }))
+    } else {
+      // 데스크톱: 우측 상단에 위치
+      setStickyNote(prev => ({
+        ...prev,
+        x: Math.max(0, window.innerWidth - 360),
+        y: 60,
+        width: 320,
+        height: 280
+      }))
+    }
+  }, [isMobile]) // isMobile 변경 시에만 실행
 
   const connectFormRef = useRef<HTMLDivElement | null>(null)
   const projectsWindowRef = useRef<HTMLDivElement | null>(null)
@@ -175,7 +194,7 @@ function Desktop() {
         )
       )
     }
-  }, [openWindows, stickyNote.zIndex])
+  }, [openWindows]) // stickyNote.zIndex 제거
 
   const connectFormWindow = openWindows.find(w => w.id === "connect-form")
   const projectsWindow = openWindows.find(w => w.id === "projects")
@@ -186,23 +205,26 @@ function Desktop() {
 
   // 스티커 메모 드래그 기능
   useLayoutEffect(() => {
-    if (stickyNoteRef.current) {
+    if (stickyNoteRef.current && typeof window !== 'undefined') {
       const dragInstance = Draggable.create(stickyNoteRef.current, {
         type: "x,y",
-        bounds: window,
-        edgeResistance: 0.65,
+        bounds: window, // 항상 window bounds 사용
+        edgeResistance: 0.5,
         throwProps: true,
         zIndexBoost: false,
+        inertia: true,
         onDragStart: function() {
           bringToFront("sticky-note")
         }
       })[0]
 
       return () => {
-        dragInstance.kill()
+        if (dragInstance) {
+          dragInstance.kill()
+        }
       }
     }
-  }, [])
+  }, [bringToFront]) // isMobile 제거 - bounds가 window로 통일됨
 
   // 스티커 메모 리사이즈 기능
   useLayoutEffect(() => {
@@ -232,8 +254,14 @@ function Desktop() {
             const deltaX = e.clientX - startX
             const deltaY = e.clientY - startY
 
-            const newWidth = Math.max(250, Math.min(window.innerWidth - 100, startWidth + deltaX))
-            const newHeight = Math.max(200, Math.min(window.innerHeight - 100, startHeight + deltaY))
+            // 모바일과 데스크톱에 따라 다른 크기 제한
+            const minWidth = isMobile ? 200 : 250
+            const minHeight = isMobile ? 120 : 200 // 모바일에서 더 작게
+            const maxWidth = isMobile ? window.innerWidth - 40 : window.innerWidth - 100
+            const maxHeight = isMobile ? window.innerHeight - 100 : window.innerHeight - 100 // footer 고려
+
+            const newWidth = Math.max(minWidth, Math.min(maxWidth, startWidth + deltaX))
+            const newHeight = Math.max(minHeight, Math.min(maxHeight, startHeight + deltaY))
 
             setStickyNote(prev => ({
               ...prev,
@@ -259,7 +287,7 @@ function Desktop() {
         }
       }
     }
-  }, [])
+  }, [isMobile])
 
   return (
     <div className="fixed inset-0 w-full h-screen text-black overflow-hidden bg-gradient-to-br from-gray-100 via-gray-100 to-gray-50">
@@ -270,7 +298,7 @@ function Desktop() {
       <div
         ref={stickyNoteRef}
         onMouseDown={() => bringToFront("sticky-note")}
-        className="absolute cursor-move transition-shadow duration-200"
+        className="absolute cursor-move transition-all duration-300 ease-out"
         style={{
           left: stickyNote.x,
           top: stickyNote.y,

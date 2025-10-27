@@ -15,6 +15,22 @@ interface AboutMeWindowProps {
 const AboutMeWindow = forwardRef<HTMLDivElement, AboutMeWindowProps>(({ size, onClose, onToggleSize, isMobile }, ref) => {
   const [isResizing, setIsResizing] = useState(false)
 
+  const education = [
+    {
+      school: "서울대학교",
+      degree: "컴퓨터공학과",
+      period: "2018 - 2022",
+      gpa: "3.8/4.0",
+      description: "프론트엔드 개발과 웹 기술에 대한 기초를 다졌으며, 다양한 프로젝트를 통해 실무 경험을 쌓았습니다."
+    },
+    {
+      school: "고등학교",
+      degree: "자연과학",
+      period: "2015 - 2017",
+      description: "기초 프로그래밍과 수학, 과학 과목을 통해 개발자로서의 기반을 마련했습니다."
+    }
+  ]
+
   const skills = [
     { category: "Frontend", items: ["React", "TypeScript", "Vue.js", "Next.js", "Tailwind CSS"] },
     { category: "Backend", items: ["Node.js", "Express", "NestJS", "PostgreSQL"] },
@@ -148,9 +164,10 @@ const AboutMeWindow = forwardRef<HTMLDivElement, AboutMeWindowProps>(({ size, on
           ></div>
           <div className="bg-gray-300 w-3 h-3 rounded-full cursor-pointer hover:bg-gray-400 transition-colors" title="최소화"></div>
           <div
-            className="bg-green-500 w-3 h-3 rounded-full cursor-pointer hover:bg-green-600 transition-colors"
-            onClick={onToggleSize}
+            className={`${isMobile ? 'bg-gray-300' : 'bg-green-500'} w-3 h-3 rounded-full cursor-pointer hover:bg-green-600 transition-colors`}
+            onClick={isMobile ? undefined : onToggleSize}
             title="크기 조절"
+            aria-label="창 크기 조절"
           ></div>
         </div>
         <span className="text-black font-light text-sm">About Me</span>
@@ -179,6 +196,24 @@ const AboutMeWindow = forwardRef<HTMLDivElement, AboutMeWindowProps>(({ size, on
                 <p className="text-sm text-gray-600">{career.position}</p>
                 <p className="text-xs text-gray-500 mb-2">{career.period}</p>
                 <p className="text-sm text-gray-700">{career.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* 교육 섹션 */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold mb-4 text-gray-800">Education</h2>
+          <div className="space-y-4">
+            {education.map((edu, index) => (
+              <div key={index} className="border-l-4 border-green-500 pl-4 py-3">
+                <h3 className="text-lg font-semibold text-gray-800">{edu.school}</h3>
+                <p className="text-sm text-gray-600 mb-1">{edu.degree}</p>
+                <p className="text-xs text-gray-500 mb-2">{edu.period}</p>
+                {edu.gpa && (
+                  <p className="text-xs text-blue-600 mb-2 font-medium">GPA: {edu.gpa}</p>
+                )}
+                <p className="text-sm text-gray-700">{edu.description}</p>
               </div>
             ))}
           </div>

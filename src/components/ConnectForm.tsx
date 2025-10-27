@@ -184,9 +184,10 @@ ${values.content || "문의내용없음"}
           ></div>
           <div className="bg-gray-300 w-3 h-3 rounded-full cursor-pointer hover:bg-gray-400 transition-colors" title="최소화"></div>
           <div
-            className="bg-green-500 w-3 h-3 rounded-full cursor-pointer hover:bg-green-600 transition-colors"
-            onClick={onToggleSize}
+            className={`${isMobile ? 'bg-gray-300' : 'bg-green-500'} w-3 h-3 rounded-full cursor-pointer hover:bg-green-600 transition-colors`}
+            onClick={isMobile ? undefined : onToggleSize}
             title="크기 조절"
+            aria-label="창 크기 조절"
           ></div>
         </div>
         <span className="text-black font-light text-sm">Connect Yuyu</span>
@@ -194,8 +195,8 @@ ${values.content || "문의내용없음"}
    
       {/* 폼 내용 */}
       <div className={`bg-white p-[24px] rounded-b-lg shadow-2xl h-full flex flex-col ${size === "full" && isMobile ? 'pb-[66px]' : ''}`}>
-              <h2 className="text-2xl font-bold mb-4 text-gray-800">Contact yuyu</h2>
-        <div className="grid grid-cols-2 gap-4 mb-4">
+        <h2 className="text-2xl font-bold mb-4 text-gray-800">Contact yuyu</h2>
+        <div className="contact_user_info_form">
           <input 
             type="text" 
             className="QnA_input" 
@@ -246,7 +247,7 @@ ${values.content || "문의내용없음"}
       </div>
 
       {/* 리사이즈 핸들 */}
-      {size !== "full" && (
+      {size !== "full" && !isMobile && (
         <div
           className="resize-handle absolute w-8 h-8 cursor-se-resize flex items-center justify-center"
           style={{ 
