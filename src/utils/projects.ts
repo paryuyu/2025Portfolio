@@ -91,7 +91,7 @@ export const projectInformation = [
     projectVideoResources: '',
     period: {
       start: new Date("2024-02-01"),
-      end: new Date("2025-09-30"),
+      end: new Date("2024-11-31"),
     },
   },
   {
@@ -146,7 +146,7 @@ export const projectInformation = [
         usedSkills.jQuery,
         usedSkills.scss,
     ],
-    mainRole: '회사 홈페이지 UI/UX 유지보수',
+    mainRole: '회사 홈페이지 UI/UX 상시 유지보수',
     description: '알트에이 홈페이지',
     contribution: [
         "저해상도 기준으로 작성된 CSS를 고해상도 환경에 맞게 최적화",
@@ -157,8 +157,8 @@ export const projectInformation = [
     projectVideoResources: '',
     thumnail: "/images/thumnails/alta.png",
     period: {
-      start: new Date("2023-08-01"),
-      end: new Date("2023-11-30"),
+      start: new Date("2023-08-21"),
+      end: new Date("2025-10-22"),
     },
   },{
     projectNo: 6,
@@ -175,8 +175,8 @@ export const projectInformation = [
     ],
     thumnail:"/images/thumnails/ntlight.svg",
     period: {
-      start: new Date("2023-08-01"),
-      end: new Date("2023-11-30"),
+      start: new Date("2023-10-01"),
+      end: new Date("2023-10-30"),
     },
   },
 ] as project[];

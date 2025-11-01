@@ -4,7 +4,6 @@ import { Draggable } from "gsap/Draggable"
 import ConnectForm from "./ConnectForm"
 import ProjectsWindow from "./ProjectsWindow"
 import AboutMeWindow from "./AboutMeWindow"
-import NetworkingWindow from "./NetworkingWindow"
 import Dock from "./Dock"
 import DesktopApps from "./DesktopApps"
 import { stickerMemo } from "../utils/stickerMemo"
@@ -47,8 +46,7 @@ function Desktop() {
   const [openWindows, setOpenWindows] = useState<AppWindow[]>([
     { id: "connect-form", name: "connect", isOpen: false, isMinimized: false, size: 120, zIndex: 1 },
     { id: "projects", name: "projects", isOpen: false, isMinimized: false, size: 120, zIndex: 1 },
-    { id: "about-me", name: "about me", isOpen: false, isMinimized: false, size: 120, zIndex: 1 },
-    { id: "networking", name: "networking", isOpen: false, isMinimized: false, size: 120, zIndex: 1 }
+    { id: "about-me", name: "about me", isOpen: false, isMinimized: false, size: 120, zIndex: 1 }
   ])
 
   const [stickyNote, setStickyNote] = useState<StickyNote>({
@@ -66,8 +64,6 @@ function Desktop() {
 
     if (isMobile) {
       // 모바일: 하단 중앙에 위치, footer 위쪽에 배치
-      const footerHeight = 50 // footer 높이 추정
-      const margin = 15 // 여백
       setStickyNote(prev => ({
         ...prev,
         x: Math.max(0, (window.innerWidth - 280) / 2), // 중앙 정렬 (음수 방지)
@@ -90,7 +86,6 @@ function Desktop() {
   const connectFormRef = useRef<HTMLDivElement | null>(null)
   const projectsWindowRef = useRef<HTMLDivElement | null>(null)
   const aboutMeWindowRef = useRef<HTMLDivElement | null>(null)
-  const networkingWindowRef = useRef<HTMLDivElement | null>(null)
   const stickyNoteRef = useRef<HTMLDivElement | null>(null)
 
   const handleAppDoubleClick = (appName: string) => {
@@ -199,7 +194,7 @@ function Desktop() {
   const connectFormWindow = openWindows.find(w => w.id === "connect-form")
   const projectsWindow = openWindows.find(w => w.id === "projects")
   const aboutMeWindow = openWindows.find(w => w.id === "about-me")
-  const networkingWindow = openWindows.find(w => w.id === "networking")
+  
   const activeAppNames = openWindows.filter(w => w.isOpen).map(w => w.name)
   const hasMaximizedWindow = openWindows.some(w => w.isOpen && w.size === "full")
 
@@ -318,10 +313,11 @@ function Desktop() {
 
       {/* ConnectForm 윈도우 */}
       {connectFormWindow?.isOpen && !connectFormWindow.isMinimized && (
-        <div onMouseDown={() => bringToFront("connect-form")} style={{ zIndex: connectFormWindow.zIndex }}>
+        <div onMouseDownCapture={() => bringToFront("connect-form")} style={{ zIndex: connectFormWindow.zIndex }}>
           <ConnectForm
             ref={connectFormRef}
             size={connectFormWindow.size}
+            zIndex={connectFormWindow.zIndex}
             onClose={() => toggleWindow("connect-form")}
             onToggleSize={() => toggleSize("connect-form")}
             isMobile={isMobile}
@@ -331,10 +327,12 @@ function Desktop() {
 
       {/* ProjectsWindow 윈도우 */}
       {projectsWindow?.isOpen && !projectsWindow.isMinimized && (
-        <div onMouseDown={() => bringToFront("projects")} style={{ zIndex: projectsWindow.zIndex }}>
+        <div onMouseDownCapture={() => bringToFront("projects")} style={{ zIndex: projectsWindow.zIndex }}>
           <ProjectsWindow
             ref={projectsWindowRef}
             size={projectsWindow.size}
+            zIndex={projectsWindow.zIndex}
+            onFocusCapture={() => bringToFront("projects")}
             onClose={() => toggleWindow("projects")}
             onToggleSize={() => toggleSize("projects")}
             isMobile={isMobile}
@@ -344,10 +342,11 @@ function Desktop() {
 
       {/* AboutMeWindow 윈도우 */}
       {aboutMeWindow?.isOpen && !aboutMeWindow.isMinimized && (
-        <div onMouseDown={() => bringToFront("about-me")} style={{ zIndex: aboutMeWindow.zIndex }}>
+        <div onMouseDownCapture={() => bringToFront("about-me")} style={{ zIndex: aboutMeWindow.zIndex }}>
           <AboutMeWindow
             ref={aboutMeWindowRef}
             size={aboutMeWindow.size}
+            zIndex={aboutMeWindow.zIndex}
             onClose={() => toggleWindow("about-me")}
             onToggleSize={() => toggleSize("about-me")}
             isMobile={isMobile}
@@ -355,18 +354,7 @@ function Desktop() {
         </div>
       )}
 
-      {/* NetworkingWindow 윈도우 */}
-      {networkingWindow?.isOpen && !networkingWindow.isMinimized && (
-        <div onMouseDown={() => bringToFront("networking")} style={{ zIndex: networkingWindow.zIndex }}>
-          <NetworkingWindow
-            ref={networkingWindowRef}
-            size={networkingWindow.size}
-            onClose={() => toggleWindow("networking")}
-            onToggleSize={() => toggleSize("networking")}
-            isMobile={isMobile}
-          />
-        </div>
-      )}
+      
 
       {/* 맥 스타일 독(Dock) */}
       <div style={{ zIndex: 1 }}>

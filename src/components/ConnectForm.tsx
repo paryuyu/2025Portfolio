@@ -10,9 +10,10 @@ interface ConnectFormProps {
   onClose: () => void
   onToggleSize: () => void
   isMobile?: boolean
+  zIndex?: number
 }
 
-const ConnectForm = forwardRef<HTMLDivElement, ConnectFormProps>(({ size, onClose, onToggleSize, isMobile }, ref) => {
+const ConnectForm = forwardRef<HTMLDivElement, ConnectFormProps>(({ size, onClose, onToggleSize, isMobile, zIndex }, ref) => {
   const [values, setValues] = useState({
     company: "",
     name: "",
@@ -171,7 +172,8 @@ ${values.content || "문의내용없음"}
         height: size === "full" ? `calc(100vh - ${isMobile ? 132 : 90}px)` : "600px",
         top: size === "full" ? "0" : "16px",
         left: size === "full" ? "0" : "16px",
-        transform: "none"
+        transform: "none",
+        zIndex: zIndex
       }}
     >
       {/* 맥 스타일 윈도우 바 */}

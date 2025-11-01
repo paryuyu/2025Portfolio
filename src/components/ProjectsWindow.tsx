@@ -1,4 +1,4 @@
-import { useState, forwardRef, useLayoutEffect } from "react"
+import { useState, forwardRef, useLayoutEffect, useMemo } from "react"
 import { gsap } from "gsap"
 import { Draggable } from "gsap/Draggable"
 import { projectInformation } from "../utils/projects"
@@ -10,10 +10,20 @@ interface ProjectsWindowProps {
   onClose: () => void
   onToggleSize: () => void
   isMobile?: boolean
+  zIndex?: number
+  onFocusCapture?: () => void
 }
 
-const ProjectsWindow = forwardRef<HTMLDivElement, ProjectsWindowProps>(({ size, onClose, onToggleSize, isMobile }, ref) => {
-  const [selectedProject, setSelectedProject] = useState(projectInformation[0])
+const ProjectsWindow = forwardRef<HTMLDivElement, ProjectsWindowProps>(({ size, onClose, onToggleSize, isMobile, zIndex, onFocusCapture }, ref) => {
+  const sortedProjects = useMemo(() => {
+    const getEndTime = (p: typeof projectInformation[number]) => {
+      const end = p.period.end
+      return end instanceof Date ? end.getTime() : new Date(end).getTime()
+    }
+    return [...projectInformation].sort((a, b) => getEndTime(b) - getEndTime(a))
+  }, [])
+
+  const [selectedProject, setSelectedProject] = useState(sortedProjects[0])
   const [isResizing, setIsResizing] = useState(false)
   // 모바일 최대화 상태에서만 사이드바 토글 상태 사용 (기본적으로 메인 컨텐츠가 보임)
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false)
@@ -136,6 +146,7 @@ const ProjectsWindow = forwardRef<HTMLDivElement, ProjectsWindowProps>(({ size, 
   return (
     <div
       ref={ref}
+      onMouseDownCapture={onFocusCapture}
       className="absolute z-4"
       style={{
         padding: size === "full" ? "0" : "24px",
@@ -143,7 +154,8 @@ const ProjectsWindow = forwardRef<HTMLDivElement, ProjectsWindowProps>(({ size, 
         height: size === "full" ? `calc(100vh - ${isMobile ? 86 : 44}px)` : "500px",
         top: size === "full" ? "0" : "16px",
         left: size === "full" ? "0" : "16px",
-        transform: "none"
+        transform: "none",
+        zIndex: zIndex
       }}
     >
       {/* 맥 스타일 윈도우 바 */}
@@ -167,30 +179,6 @@ const ProjectsWindow = forwardRef<HTMLDivElement, ProjectsWindowProps>(({ size, 
           <span className="text-black font-light text-sm">Projects</span>
         </div>
 
-        {/* 모바일 최대화 시 사이드바 토글 버튼 */}
-        {size === "full" && isMobile && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              handleToggleSidebar()
-            }}
-            className="sidebar-toggle-button flex items-center gap-1 px-2 py-1 bg-gray-200 hover:bg-gray-300 rounded text-xs transition-all duration-200"
-            title={!sidebarIsOpen ? "사이드바 접기" : "사이드바 펼치기"}
-            aria-label={!sidebarIsOpen ? "프로젝트 목록 사이드바 접기" : "프로젝트 목록 사이드바 펼치기"}
-            aria-expanded={!sidebarIsOpen}
-          >
-            <svg
-              className={`w-4 h-4 transition-transform duration-200 ${!sidebarIsOpen ? '' : 'rotate-180'}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            <span>{!sidebarIsOpen ? '접기' : '펼치기'}</span>
-          </button>
-        )}
       </div>
 
       {/* 프로젝트 내용 */}
@@ -332,7 +320,7 @@ const ProjectsWindow = forwardRef<HTMLDivElement, ProjectsWindowProps>(({ size, 
                   </button>
                 </div>
                 <div className="space-y-2">
-                  {projectInformation.map((project) => (
+                  {sortedProjects.map((project) => (
                     <div
                       key={project.projectNo}
                       className={`project-item p-3 rounded-lg cursor-pointer ${
@@ -375,7 +363,7 @@ const ProjectsWindow = forwardRef<HTMLDivElement, ProjectsWindowProps>(({ size, 
               <div className="p-4">
                 <h3 className="text-sm font-semibold text-gray-600 mb-3">프로젝트 목록</h3>
                 <div className="space-y-2">
-                  {projectInformation.map((project) => (
+                  {sortedProjects.map((project) => (
                     <div
                       key={project.projectNo}
                       className={`p-3 rounded-lg cursor-pointer transition-colors duration-200 ${
@@ -503,10 +491,10 @@ const ProjectsWindow = forwardRef<HTMLDivElement, ProjectsWindowProps>(({ size, 
       {/* 리사이즈 핸들 */}
       {size !== "full" && (
         <div
-          className="resize-handle absolute w-8 h-8 cursor-se-resize flex items-center justify-center"
+          className="resize-handle absolute w-8 h-8 cursor-se-resize flex items-center justify-center bg-gray-200/10 rounded-sm"
           style={{
-            bottom: "-28px",
-            right: "16px",
+            bottom: "24px",
+            right: "24px",
             zIndex: 100
           }}
         >

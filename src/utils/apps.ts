@@ -27,13 +27,5 @@ export const apps = [
         top: 100,
         left: 100,
     },
-  },{
-    name: "networking",
-    description: "Networking events",
-    image: messages, // TODO: 네트워킹 전용 이미지 추가 필요
-    position:{
-        top: 100,
-        left: 100,
-    },
   }
 ]
