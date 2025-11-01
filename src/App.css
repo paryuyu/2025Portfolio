@@ -185,6 +185,11 @@
             @apply flex flex-col gap-2 mb-2;
         }
 
+        /* Prevent iOS Safari auto-zoom on input focus by ensuring >=16px */
+        .QnA_input{
+            @apply text-base;
+        }
+
         .project_ticket{
             @apply border border-gray-200 rounded-lg max-w-[800px] w-full h-[260px] mt-6 relative bg-gray-50;
         }

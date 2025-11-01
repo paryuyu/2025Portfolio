@@ -206,6 +206,8 @@ ${values.content || "문의내용없음"}
             value={values.company} 
             onChange={handleText} 
             name="company" 
+            inputMode="text"
+            autoComplete="organization"
           />
           <input 
             type="text" 
@@ -214,6 +216,8 @@ ${values.content || "문의내용없음"}
             value={values.name} 
             onChange={handleText} 
             name="name" 
+            inputMode="text"
+            autoComplete="name"
           />
           <input 
             type="email" 
@@ -222,6 +226,8 @@ ${values.content || "문의내용없음"}
             value={values.mail} 
             onChange={handleText} 
             name="mail" 
+            inputMode="email"
+            autoComplete="email"
           />
           <input 
             type="tel" 
@@ -230,6 +236,8 @@ ${values.content || "문의내용없음"}
             value={values.phone} 
             onChange={handleText} 
             name="phone" 
+            inputMode="tel"
+            autoComplete="tel"
           />
         </div>
         <textarea 
