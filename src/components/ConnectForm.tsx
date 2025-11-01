@@ -23,6 +23,7 @@ const ConnectForm = forwardRef<HTMLDivElement, ConnectFormProps>(({ size, onClos
   })
 
   const [isResizing, setIsResizing] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleText = (evt: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const value = evt.target.value
@@ -46,6 +47,7 @@ ${values.content || "문의내용없음"}
 `
 
     try {
+      setIsSubmitting(true)
       await ky
         .post(url, {
           json: { text: message },
@@ -54,8 +56,11 @@ ${values.content || "문의내용없음"}
         .json()
 
       alert("전송되었습니다!")
+      setValues({ company: "", name: "", mail: "", phone: "", content: "" })
     } catch (err) {
       alert("문의내용을 작성해주세요.")
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -196,7 +201,7 @@ ${values.content || "문의내용없음"}
       </div>
    
       {/* 폼 내용 */}
-      <div className={`bg-white p-[24px] rounded-b-lg shadow-2xl h-full flex flex-col ${size === "full" && isMobile ? 'pb-[66px]' : ''}`}>
+      <div className={`bg-white p-[24px] rounded-b-lg shadow-2xl h-full flex flex-col ${size === "full" && isMobile ? 'pb-[66px]' : ''}`} aria-busy={isSubmitting}>
         <h2 className="text-2xl font-bold mb-4 text-gray-800">Contact yuyu</h2>
         <div className="contact_user_info_form">
           <input 
@@ -208,6 +213,7 @@ ${values.content || "문의내용없음"}
             name="company" 
             inputMode="text"
             autoComplete="organization"
+            disabled={isSubmitting}
           />
           <input 
             type="text" 
@@ -218,6 +224,7 @@ ${values.content || "문의내용없음"}
             name="name" 
             inputMode="text"
             autoComplete="name"
+            disabled={isSubmitting}
           />
           <input 
             type="email" 
@@ -228,6 +235,7 @@ ${values.content || "문의내용없음"}
             name="mail" 
             inputMode="email"
             autoComplete="email"
+            disabled={isSubmitting}
           />
           <input 
             type="tel" 
@@ -238,6 +246,7 @@ ${values.content || "문의내용없음"}
             name="phone" 
             inputMode="tel"
             autoComplete="tel"
+            disabled={isSubmitting}
           />
         </div>
         <textarea 
@@ -246,13 +255,22 @@ ${values.content || "문의내용없음"}
           value={values.content} 
           onChange={handleText} 
           name="content" 
+          disabled={isSubmitting}
         />
         <button 
-          className="text-sm bg-gray-200 w-full p-3 rounded-lg cursor-pointer hover:bg-gray-300 mt-4" 
+          className={`text-sm bg-gray-200 w-full p-3 rounded-lg mt-4 ${isSubmitting ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer hover:bg-gray-300'}`}
           type="submit"
           onClick={handleSubmit}
+          disabled={isSubmitting}
         >
-          전송하기
+          {isSubmitting ? (
+            <span className="inline-flex items-center gap-2 justify-center">
+              <span className="loader-spinner" />
+              전송 중...
+            </span>
+          ) : (
+            '전송하기'
+          )}
         </button>
       </div>
 
