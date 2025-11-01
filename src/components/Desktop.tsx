@@ -63,16 +63,16 @@ function Desktop() {
     if (typeof window === 'undefined' || !window.innerWidth) return
 
     if (isMobile) {
-      // 모바일: 하단 중앙에 위치, footer 위쪽에 배치
+      // 모바일: 상단 우측에 위치
       setStickyNote(prev => ({
         ...prev,
-        x: Math.max(0, (window.innerWidth - 280) / 2), // 중앙 정렬 (음수 방지)
-        y: Math.max(60, window.innerHeight - 400), // footer 위쪽에 배치
+        x: Math.max(0, window.innerWidth - 280 - 16),
+        y: 60,
         width: 280,
-        height: 400 
+        height: 400
       }))
     } else {
-      // 데스크톱: 우측 상단에 위치
+      // 데스크톱: 상단 우측에 위치
       setStickyNote(prev => ({
         ...prev,
         x: Math.max(0, window.innerWidth - 360),
