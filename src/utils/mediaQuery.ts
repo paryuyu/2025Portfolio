@@ -1,4 +1,4 @@
-import { atom, useAtom } from "jotai"
+import { useAtom } from "jotai"
 import { deviceAtom } from "./atoms";
 import { useEffect } from "react";
 
@@ -10,7 +10,7 @@ export const useDevice = () => {
    }
    useEffect(() => {
       console.log('useDevice working----!')
-      if (typeof window !== undefined) {
+      if (typeof window !== "undefined") {
          const handleResize = () => {
             const innerWidth = window.innerWidth;
             if (innerWidth <= width.mobile) {

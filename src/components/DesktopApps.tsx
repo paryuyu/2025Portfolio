@@ -14,7 +14,7 @@ function DesktopApps({ onAppDoubleClick }: DesktopAppsProps) {
   const appRefs = useRef<(HTMLDivElement | null)[]>([])
   const dragInstances = useRef<Draggable[][]>([])
   const lastTapTimes = useRef<{ [key: string]: { time: number; x: number; y: number } }>({})
-  const tapTimeouts = useRef<{ [key: string]: NodeJS.Timeout }>({})
+  const tapTimeouts = useRef<{ [key: string]: ReturnType<typeof setTimeout> }>({})
 
   // 더블탭 핸들러 (모바일용)
   const handleDoubleTap = useCallback((appName: string, touchEvent?: TouchEvent) => {
@@ -100,14 +100,14 @@ function DesktopApps({ onAppDoubleClick }: DesktopAppsProps) {
           throwProps: true,
           zIndexBoost: false,
           force3D: false,
-          onPress: function(e) {
+          onPress: function() {
             // 더블탭 감지 (300ms 내에 이전 탭이 있었는지 확인)
             const now = Date.now()
             const lastTap = lastTapTimes.current[apps[index].name]
 
             if (lastTap && (now - lastTap.time) < 300) {
               // 더블탭 감지됨 - 드래그 시작하지 않음
-              return false
+              return
             }
 
             // 일반 클릭/드래그 - 선택 상태로 만들기

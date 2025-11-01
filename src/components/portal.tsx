@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 
-export const Portal = ({ children, customId }) => {
+interface PortalProps {
+  children: React.ReactNode
+  customId: string
+}
+
+export const Portal = ({ children, customId }: PortalProps) => {
    const [isMounted, setIsMounted] = useState(false);  
    // 컴포넌트가 클라이언트에서 마운트되었는지 여부를 확인하기 위한 상태를 정의.
  
