@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { apps } from "../utils/apps"
+import ImageWithSkeleton from "./ImageWithSkeleton"
 
 interface DockProps {
   activeApps: string[]
@@ -28,10 +29,11 @@ function Dock({ activeApps, onAppClick, hasMaximizedWindow }: DockProps) {
               onMouseEnter={() => handleMouseEnter(app.name)}
               onMouseLeave={() => setHoveredApp(null)}
             >
-              <img 
-                src={app.image} 
+              <ImageWithSkeleton
+                src={app.image}
                 alt={app.name}
                 className="w-full h-full object-cover"
+                wrapperClassName="w-full h-full"
               />
             </div>
             {isHovered && (

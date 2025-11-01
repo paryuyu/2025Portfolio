@@ -2,6 +2,8 @@ import { useState, forwardRef, useLayoutEffect, useMemo } from "react"
 import { gsap } from "gsap"
 import { Draggable } from "gsap/Draggable"
 import { projectInformation } from "../utils/projects"
+import ImageWithSkeleton from "./ImageWithSkeleton"
+import VideoWithSkeleton from "./VideoWithSkeleton"
 
 gsap.registerPlugin(Draggable)
 
@@ -225,10 +227,11 @@ const ProjectsWindow = forwardRef<HTMLDivElement, ProjectsWindowProps>(({ size, 
                 {/* 썸네일 */}
                 {selectedProject.thumnail && (
                   <div className="mb-6 rounded-lg overflow-hidden shadow-md">
-                    <img
+                    <ImageWithSkeleton
                       src={selectedProject.thumnail}
                       alt={`${selectedProject.projectName} 프로젝트 썸네일`}
                       className="w-full max-h-[400px] object-contain p-8"
+                      wrapperClassName="w-full max-h-[400px]"
                     />
                   </div>
                 )}
@@ -263,19 +266,10 @@ const ProjectsWindow = forwardRef<HTMLDivElement, ProjectsWindowProps>(({ size, 
 
                 {/* 프로젝트 비디오 */}
                 {selectedProject.projectVideoResources && (
-                  <div className="mb-6">
-                    <h3 className="text-lg font-semibold text-gray-800 mb-3">프로젝트 데모</h3>
-                    <div className="rounded-lg overflow-hidden shadow-lg">
-                      <video
-                        src={selectedProject.projectVideoResources}
-                        controls
-                        className="w-full"
-                        aria-label={`${selectedProject.projectName} 프로젝트 데모 영상`}
-                      >
-                        Your browser does not support the video tag.
-                      </video>
-                    </div>
-                  </div>
+                  <VideoWithSkeleton
+                    src={selectedProject.projectVideoResources}
+                    label={`${selectedProject.projectName} 프로젝트 데모 영상`}
+                  />
                 )}
 
                 {/* 프로젝트 기간 */}
@@ -416,10 +410,11 @@ const ProjectsWindow = forwardRef<HTMLDivElement, ProjectsWindowProps>(({ size, 
                 {/* 썸네일 */}
                 {selectedProject.thumnail && (
                   <div className="mb-6 rounded-lg overflow-hidden shadow-md">
-                    <img
+                    <ImageWithSkeleton
                       src={selectedProject.thumnail}
                       alt={`${selectedProject.projectName} 프로젝트 썸네일`}
                       className="w-full max-h-[400px] object-contain p-8"
+                      wrapperClassName="w-full max-h-[400px]"
                     />
                   </div>
                 )}
@@ -454,19 +449,10 @@ const ProjectsWindow = forwardRef<HTMLDivElement, ProjectsWindowProps>(({ size, 
 
                 {/* 프로젝트 비디오 */}
                 {selectedProject.projectVideoResources && (
-                  <div className="mb-6">
-                    <h3 className="text-lg font-semibold text-gray-800 mb-3">프로젝트 데모</h3>
-                    <div className="rounded-lg overflow-hidden shadow-lg">
-                      <video
-                        src={selectedProject.projectVideoResources}
-                        controls
-                        className="w-full"
-                        aria-label={`${selectedProject.projectName} 프로젝트 데모 영상`}
-                      >
-                        Your browser does not support the video tag.
-                      </video>
-                    </div>
-                  </div>
+                  <VideoWithSkeleton
+                    src={selectedProject.projectVideoResources}
+                    label={`${selectedProject.projectName} 프로젝트 데모 영상`}
+                  />
                 )}
 
                 {/* 프로젝트 기간 */}

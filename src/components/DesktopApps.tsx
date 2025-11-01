@@ -2,6 +2,7 @@ import { useState, useLayoutEffect, useRef, useEffect, useCallback } from "react
 import { gsap } from "gsap"
 import { Draggable } from "gsap/Draggable"
 import { apps } from "../utils/apps"
+import ImageWithSkeleton from "./ImageWithSkeleton"
 
 gsap.registerPlugin(Draggable)
 
@@ -171,10 +172,11 @@ function DesktopApps({ onAppDoubleClick }: DesktopAppsProps) {
           }}
         >
           <div className="pointer-events-none">
-            <img
+            <ImageWithSkeleton
               src={app.image}
               alt={app.name}
               className={`${selectedApp === app.name ? "grayscale-50" : ""} w-full h-full object-cover`}
+              wrapperClassName="w-full h-full"
             />
           </div>
           <span className={`${selectedApp === app.name ? "font-semibold" : ""} text-xs text-center leading-tight pointer-events-none`}>
