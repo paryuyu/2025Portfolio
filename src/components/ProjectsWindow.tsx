@@ -230,8 +230,8 @@ const ProjectsWindow = forwardRef<HTMLDivElement, ProjectsWindowProps>(({ size, 
                     <ImageWithSkeleton
                       src={selectedProject.thumnail}
                       alt={`${selectedProject.projectName} 프로젝트 썸네일`}
-                      className="w-full max-h-[400px] object-contain p-8"
-                      wrapperClassName="w-full max-h-[400px]"
+                      className="w-full h-[400px] object-contain p-8"
+                      wrapperClassName="w-full h-[400px]"
                     />
                   </div>
                 )}
@@ -413,8 +413,8 @@ const ProjectsWindow = forwardRef<HTMLDivElement, ProjectsWindowProps>(({ size, 
                     <ImageWithSkeleton
                       src={selectedProject.thumnail}
                       alt={`${selectedProject.projectName} 프로젝트 썸네일`}
-                      className="w-full max-h-[400px] object-contain p-8"
-                      wrapperClassName="w-full max-h-[400px]"
+                      className="w-full h-[400px] object-contain p-8"
+                      wrapperClassName="w-full h-[400px]"
                     />
                   </div>
                 )}

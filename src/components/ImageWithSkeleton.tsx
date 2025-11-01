@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 type ImageWithSkeletonProps = {
   src: string
@@ -11,17 +11,25 @@ type ImageWithSkeletonProps = {
 function ImageWithSkeleton({ src, alt, className, wrapperClassName, imgProps }: ImageWithSkeletonProps) {
   const [loaded, setLoaded] = useState(false)
 
+  // Reset loading state on src change to show skeleton immediately
+  useEffect(() => {
+    setLoaded(false)
+  }, [src])
+
   return (
-    <div className={wrapperClassName}>
+    <div className={`relative ${wrapperClassName || ""}`} aria-busy={!loaded}>
       {!loaded && (
-        <div className="skeleton w-full h-full" aria-hidden="true"></div>
+        <div className="absolute inset-0 skeleton" aria-hidden="true"></div>
       )}
       <img
+        key={src}
         src={src}
         alt={alt}
         className={`${className || ""} ${loaded ? "opacity-100" : "opacity-0"}`}
         onLoad={() => setLoaded(true)}
+        onError={() => setLoaded(true)}
         loading="lazy"
+        decoding="async"
         {...imgProps}
       />
     </div>
