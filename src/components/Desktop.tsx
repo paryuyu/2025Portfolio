@@ -54,7 +54,7 @@ function Desktop() {
     x: 0,
     y: 60, // 기본값 (useLayoutEffect에서 즉시 올바른 위치로 업데이트)
     width: 320,
-    height: 280,
+    height: isMobile ? 100 : 280,
     zIndex: 1
   })
 
@@ -69,7 +69,7 @@ function Desktop() {
         x: Math.max(0, (window.innerWidth - 280) / 2), // 중앙 정렬 (음수 방지)
         y: Math.max(60, window.innerHeight - 400), // footer 위쪽에 배치
         width: 280,
-        height: 100 
+        height: 400 
       }))
     } else {
       // 데스크톱: 우측 상단에 위치
@@ -304,7 +304,7 @@ function Desktop() {
       >
         {/* 스티커 내용 */}
         <div
-          className="bg-blue-50 p-3 border border-blue-100 text-xs text-gray-700 leading-relaxed whitespace-pre-line no-select"
+          className={`bg-blue-50  border border-blue-100 text-xs text-gray-700 leading-relaxed whitespace-pre-line no-select ${isMobile ? 'text-[10px] p-1 max-w-[240px]' : 'p-3'}`}
         >
           {stickerMemo}
         </div>

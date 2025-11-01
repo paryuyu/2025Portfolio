@@ -112,7 +112,7 @@ const ProjectsWindow = forwardRef<HTMLDivElement, ProjectsWindowProps>(({ size, 
           y: '40px',
           padding: 0,
           width: "100vw",
-          height: `calc(100vh - ${isMobile ? 86 : 44}px)`,
+          height: `calc(100dvh - 40px)`,
           ease: "power2.out"
         })
       } else {
@@ -151,7 +151,7 @@ const ProjectsWindow = forwardRef<HTMLDivElement, ProjectsWindowProps>(({ size, 
       style={{
         padding: size === "full" ? "0" : "24px",
         width: size === "full" ? "100vw" : "600px",
-        height: size === "full" ? `calc(100vh - ${isMobile ? 86 : 44}px)` : "500px",
+        height: size === "full" ? `calc(100dvh - 40px)` : "500px",
         top: size === "full" ? "0" : "16px",
         left: size === "full" ? "0" : "16px",
         transform: "none",

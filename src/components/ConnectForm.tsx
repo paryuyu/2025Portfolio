@@ -143,7 +143,7 @@ ${values.content || "문의내용없음"}
           y: '40px',
           padding: 0,
           width: "100vw",
-          height: `calc(100vh - ${isMobile ? 122 : 80}px)`,
+          height: `calc(100dvh - ${isMobile ? 40 : 80}px)`,
           ease: "power2.out"
         })
       } else {
